@@ -14,9 +14,10 @@ NAME = MiniRT
 
 GNL = gnl/*.c
 SRC = 	srcs/*.c
-MLX = -I /user/local/include
+MLX = -I /usr/local/include
 LIBFT = libft/
 FLAG =  -L /usr/local/lib -lmlx -framework OpenGl -framework AppKit -D BUFFER_SIZE=32
+LINUX_FLAG = -L /usr/local/lib -lmlx -lX11 -lXext -D BUFFER_SIZE=32 -lm
 all: $(NAME)
 $(NAME) : 
 			@sh srcs/artwork.sh
@@ -37,4 +38,7 @@ fclean: clean
 re : fclean all
 test : 
 			@gcc $(MLX) -g $(FLAG) main.c $(LIBFT)libft.a  $(SRC) $(GNL) -o $(NAME)
+linux :
+			@gcc  -g  main.c $(SRC) $(LIBFT)libft.a  $(MLX) $(LINUX_FLAG) $(GNL) -o $(NAME)
+			
 .PHONY: all clean fclean re bonus
