@@ -13,7 +13,7 @@
 #  define KEY_4 86
 #  define KEY_6 88
 #  define KEY_2 84
-# elif defined(__LINUX__)
+# elif defined(__linux__)
 #  define KEY_ESC 53
 #  define KEY_C 8
 #  define KEY_UP 126
