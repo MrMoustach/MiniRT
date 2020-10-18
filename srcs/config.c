@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/03/09 17:12:32 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/18 01:40:46 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,14 @@ void	parse_triangle(char **tab, t_scene *scene)
 	ft_lstadd_back(&((*scene).objects), ft_lstnew(ob));
 }
 
+t_config	ft_check_res(t_config config)
+{
+	if (config.width > 2560)
+		config.width = 2560;
+	if (config.height > 1440)
+		config.height = 1440;
+	return (config);
+}
 void	ft_line_parse(char *line,t_scene *scene)
 {
 	char	**tab;
@@ -277,6 +285,8 @@ void	ft_line_parse(char *line,t_scene *scene)
 	{
 		(*scene).config.width = ft_atoi(tab[1]);
 		(*scene).config.height = ft_atoi(tab[2]);
+		(*scene).config = ft_check_res((*scene).config);
+		printf("%d %d",(*scene).config.width, (*scene).config.height);
 	}
 	if (type > 3)
 		(*scene).obj_count++;

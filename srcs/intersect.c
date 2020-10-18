@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/03/10 16:36:24 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/18 03:19:06 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,37 @@ t_hit	ft_pl_intersect(t_ray ray, t_plane pl)
 	return (hit);
 }
 
-t_hit	ft_sq_intersect(t_ray ray, t_square sq)
+/*
+
+v = cross(cam.p2, n) 
+u = cross(v,n)
+v = norm(v)
+u = norm(u)
+r = sqrt(pow(d)/2)
+p1 = c + r*v
+p2 = c - r*v
+p3 = c + r*u
+p4 = c - r*u
+*/
+
+t_square	ft_find_sq_points(t_square sq, t_vector3 x)
+{
+	t_vector3	v;
+	t_vector3	u;
+	float		r;
+
+	r = sqrtf(powf(sq.size, 2) / 2);
+	v = ft_cross(x, sq.n);
+	u = ft_normalize(ft_cross(v, sq.n));
+	v = ft_normalize(v);
+	sq.p1 = ft_plus(sq.p,ft_multi(v, r));
+	sq.p2 = ft_minus(sq.p,ft_multi(v, r));
+	sq.p3 = ft_plus(sq.p,ft_multi(u, r));
+	sq.p4 = ft_minus(sq.p,ft_multi(u, r));
+	return (sq);
+}
+
+t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 {
 	float		denom;
 	t_vector3	tmp;
@@ -79,19 +109,9 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq)
 	float		dist;
 
 	hit.hit = FALSE;
-	denom = ft_dot(sq.n, ray.p2);
-	if (denom > 1e-6)
-	{
-		tmp = ft_minus(sq.p, ray.p1);
-		hit.sol = ft_dot(tmp, sq.n) / denom;
-		hit.p = ft_get_point(ray, hit.sol);
-		dist = ft_mag(ft_minus(hit.p, sq.p));
-		hit.hit = (hit.sol >= 0 && dist <= sq.size);
-		hit.color = sq.color;
-		hit.id = sq.id;
-		hit.normal = sq.n;
-		hit.ray = ray;
-	}
+	t_cam cam1= ft_get_cam(scene, 0,vector3(0, 0, 0), vector3(0, 0, 0));
+	sq = ft_find_sq_points(sq, cam1.ray.p2);
+	printf("%f");
 	return (hit);
 }
 

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/03/10 16:30:14 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/18 02:59:22 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_hit	ft_intersections(t_scene scene,t_ray r)
 		}
 		if ((*(t_object *)(*objs).content).type == 6)
 		{
-			hit = ft_sq_intersect(r, (*(t_object *)(*objs).content).square);
+			hit = ft_sq_intersect(r, (*(t_object *)(*objs).content).square, scene);
 			if (hit.hit && hit.sol < ret.sol)
 				ret = hit;
 		}
@@ -126,25 +126,24 @@ void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 		}
 		j++;
 	}
-	
-	mlx_string_put(cnx, win, 50, 50, 0xffffff, "Camera id:");
-	mlx_string_put(cnx, win, 150, 50, 0xffffff, ft_itoa(camera.id));
-	mlx_string_put(cnx, win, 50, 70, 0xffffff, "Pos : (");
-	mlx_string_put(cnx, win, 125, 70, 0xffffff, ft_itoa(camera.ray.p1.x));
-	mlx_string_put(cnx, win, 160, 70, 0xffffff, ",");
-	mlx_string_put(cnx, win, 170, 70, 0xffffff, ft_itoa(camera.ray.p1.y));
-	mlx_string_put(cnx, win, 200, 70, 0xffffff, ",");
-	mlx_string_put(cnx, win, 210, 70, 0xffffff, ft_itoa(camera.ray.p1.z));
-	mlx_string_put(cnx, win, 250, 70, 0xffffff, ")");
-	mlx_string_put(cnx, win, 50, 90, 0xffffff, "FOV :");
-	mlx_string_put(cnx, win, 120, 90, 0xffffff, ft_itoa(camera.fov/(M_PI/180)));
-	mlx_string_put(cnx, win, 50, 110, 0xffffff, "Rot : (");
-	mlx_string_put(cnx, win, 125, 110, 0xffffff, ft_itoa(camera.ray.p2.x));
-	mlx_string_put(cnx, win, 160, 110, 0xffffff, ",");
-	mlx_string_put(cnx, win, 170, 110, 0xffffff, ft_itoa(camera.ray.p2.y));
-	mlx_string_put(cnx, win, 200, 110, 0xffffff, ",");
-	mlx_string_put(cnx, win, 210, 110, 0xffffff, ft_itoa(camera.ray.p2.z));
-	mlx_string_put(cnx, win, 250, 110, 0xffffff, ")");
+
+	char *firstLine[] = {
+						"Camera id :", 
+						ft_itoa(camera.id), 
+						"Pos : (", 
+						ft_itoa(camera.ray.p1.x), 
+						ft_itoa(camera.ray.p1.y), 
+						ft_itoa(camera.ray.p1.z), 
+						")",
+						"Rot : (",
+						ft_itoa(camera.ray.p2.x), 
+						ft_itoa(camera.ray.p2.y), 
+						ft_itoa(camera.ray.p2.z), 
+						")",
+						"FOV :",
+						ft_itoa(camera.fov/(M_PI/180))
+						};
+	mlx_string_put(cnx, win, 50, 50, 0xffffff, concatenate(14, firstLine, " "));
 	t = clock() - t;
 	tt = ((double)t)/CLOCKS_PER_SEC;
 	printf("It took %f s to render this frame\n", tt);

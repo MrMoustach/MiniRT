@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/03/09 20:26:22 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/18 02:59:26 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # include "gnl/get_next_line.h"
 # include "types.h"
 # include "keys.h"
-#include <time.h>
+# include <time.h>
+#include "debug.h"
 
 int 	map_to_sphere(t_sphere *s, t_vector3 center, float radius,t_vector3 color);
 int 	map_to_vector3(t_vector3 *v, float x, float y, float z);
@@ -64,7 +65,7 @@ t_vector3	ft_cross(t_vector3 v1, t_vector3 v2);
 t_hit	ft_intersections(t_scene scene,t_ray r);
 t_hit	ft_pl_intersect(t_ray ray, t_plane pl);
 t_square	square(t_vector3 p, t_vector3 n, float size, t_rgb c);
-t_hit	ft_sq_intersect(t_ray ray, t_square sq);
+t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene);
 t_cylinder	cylinder(t_vector3 p, t_vector3 n, float d, float h, t_rgb c);
 t_hit ft_cy_intersect(t_ray ray, t_cylinder cy);
 t_triangle	triangle(t_vector3 v1, t_vector3 v2, t_vector3 v3, t_rgb co);

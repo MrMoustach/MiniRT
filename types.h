@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/03/09 17:11:58 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/18 02:57:10 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,10 @@ typedef struct	s_square
 {
 	t_vector3	p;
 	t_vector3	n;
+	t_vector3	p1;
+	t_vector3	p2;
+	t_vector3	p3;
+	t_vector3	p4;
 	t_rgb		color;
 	float		size;
 	int			id;
