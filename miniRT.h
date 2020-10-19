@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/19 01:05:45 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/19 17:39:42 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,5 @@ int		checkSum_line(char *line);
 void	free_tab(char **tab);
 void        *cnx;
 void        *win;
-void        *img;
+t_img       img;
 #endif

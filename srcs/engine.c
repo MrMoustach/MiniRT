@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/18 02:59:22 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/19 17:47:56 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 		}
 		j++;
 	}
-
+	mlx_put_image_to_window(cnx,win,img.img,0,0);
 	char *firstLine[] = {
 						"Camera id :", 
 						ft_itoa(camera.id), 

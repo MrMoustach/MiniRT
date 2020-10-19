@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/18 01:40:46 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/19 17:18:45 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,6 @@ void	ft_line_parse(char *line,t_scene *scene)
 		(*scene).config.width = ft_atoi(tab[1]);
 		(*scene).config.height = ft_atoi(tab[2]);
 		(*scene).config = ft_check_res((*scene).config);
-		printf("%d %d",(*scene).config.width, (*scene).config.height);
 	}
 	if (type > 3)
 		(*scene).obj_count++;
