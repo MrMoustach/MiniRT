@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/18 02:59:26 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/19 01:05:45 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy);
 t_triangle	triangle(t_vector3 v1, t_vector3 v2, t_vector3 v3, t_rgb co);
 t_hit	ft_tr_intersect(t_ray ray, t_triangle tr);
 t_cam   ft_get_cam(t_scene scene, int flag, t_vector3 mov, t_vector3 rot);
+int		ft_same_vector(t_vector3 v1, t_vector3 v2);
 int	get_type(char *type);
 int		checkSum_line(char *line);
 void	free_tab(char **tab);

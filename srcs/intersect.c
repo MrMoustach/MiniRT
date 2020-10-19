@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/18 03:19:06 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/19 02:26:47 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,28 +90,35 @@ t_square	ft_find_sq_points(t_square sq, t_vector3 x)
 	t_vector3	u;
 	float		r;
 
+	//(void) x;
 	r = sqrtf(powf(sq.size, 2) / 2);
-	v = ft_cross(x, sq.n);
+	v = ft_cross(vector3(round(sq.n.x * -1), round(sq.n.y * -1), round(sq.n.z * -1)), sq.n);
 	u = ft_normalize(ft_cross(v, sq.n));
 	v = ft_normalize(v);
 	sq.p1 = ft_plus(sq.p,ft_multi(v, r));
-	sq.p2 = ft_minus(sq.p,ft_multi(v, r));
-	sq.p3 = ft_plus(sq.p,ft_multi(u, r));
+	sq.p3 = ft_minus(sq.p,ft_multi(v, r));
+	sq.p2 = ft_plus(sq.p,ft_multi(u, r));
 	sq.p4 = ft_minus(sq.p,ft_multi(u, r));
 	return (sq);
 }
 
 t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 {
-	float		denom;
-	t_vector3	tmp;
 	t_hit		hit;
-	float		dist;
+	float		denom;
 
 	hit.hit = FALSE;
-	t_cam cam1= ft_get_cam(scene, 0,vector3(0, 0, 0), vector3(0, 0, 0));
-	sq = ft_find_sq_points(sq, cam1.ray.p2);
-	printf("%f");
+	hit.normal = vector3(0, 0, 0);
+	denom = ft_dot(sq.n, ray.p2);
+	if (denom > 1e-6)
+	{	
+		t_cam cam1= ft_get_cam(scene, 0,vector3(0, 0, 0), vector3(0, 0, 0));
+		sq = ft_find_sq_points(sq, cam1.ray.p2);
+		hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p3, sq.p2, sq.color));
+		if (!hit.hit)
+			hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p4, sq.p3, sq.color));
+		hit.normal = sq.n;
+	}
 	return (hit);
 }
 
@@ -182,7 +189,10 @@ t_hit	ft_tr_intersect(t_ray ray, t_triangle tr)
 	hit.sol = f * ft_dot(edge2, q);
 	if (hit.sol > 0.001)
 		hit.hit = TRUE;
-	hit.normal = ft_normalize(hit.normal);
+	hit.normal = ft_normalize(ft_cross(edge1, edge2));
+	a = ft_dot(hit.normal, ray.p2);
+	if (a <= 1e-6)
+		ft_reverse(&(hit.normal));
 	hit.color = tr.color;
 	hit.ray = ray;
 	hit.id = tr.id;

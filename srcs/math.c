@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 20:43:56 by iharchi           #+#    #+#             */
-/*   Updated: 2020/03/04 20:37:26 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/19 01:05:35 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,11 @@ float	clamp(float min, float val, float max)
 t_vector3 sphere_normal(t_vector3 c, t_vector3 pi)
 {
 	return (ft_minus(pi, c));
+}
+
+int		ft_same_vector(t_vector3 v1, t_vector3 v2)
+{
+	if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z)
+		return (TRUE);
+	return (FALSE);
 }
