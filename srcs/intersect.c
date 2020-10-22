@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/19 02:26:47 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/22 20:44:18 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,26 +133,29 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 
 	pos = ft_minus(ray.p1, cy.c);
 	a = (ray.p2.x * ray.p2.x) + (ray.p2.z * ray.p2.z);
-	b = 2 * ((ray.p1.x * ray.p2.x) + (pos.z * ray.p2.z));
-	c = (pos.x *pos.x) + (pos.z * pos.z) - cy.r * 2;
+	b = 2 * ((pos.x * ray.p2.x) + (pos.z * ray.p2.z));
+	c = (pos.x * pos.x) + (pos.z * pos.z) - cy.r * cy.r;
 	delta = b * b - 4 * a * c;
 	hit.hit = FALSE;
 	if (delta > 0)
 	{
-		hit.sol = -b - sqrtf(delta) / (2.0 * a);
-		if (hit.sol > -b + sqrtf(delta) / (2.0 * a))
-			hit.sol = -b + sqrtf(delta) / (2.0 * a);
+		hit.sol = -b + sqrtf(delta) / (2.0 * a);
+		if (hit.sol > -b - sqrtf(delta) / (2.0 * a))
+			hit.sol = -b - sqrtf(delta) / (2.0 * a);
 		if (hit.sol < 0)
 			return (hit);
 		hit.sol /= 2;
 		hit.p = ft_get_point(ray, hit.sol);
+			//printf("%f %f %f\n",hit.p.x, hit.p.y, hit.p.z);
 		if ((hit.p.y > cy.c.y) && (hit.p.y < cy.c.y + cy.h))
 		{
 			hit.hit = TRUE;
-			hit.normal = ft_normalize(ft_minus(vector3(cy.c.x, 0 , cy.c.z), hit.p));
+			hit.normal = ft_normalize(ft_minus(vector3(cy.c.x, cy.c.y + cy.h / 2 , cy.c.z), hit.p));
+			// hit.normal = ft_normalize(ft_minus(cy.c, hit.p));
 			hit.id = cy.id;
 			hit.ray = ray;
 			hit.color = cy.color;
+			//printf("%d %d %d\n",hit.color.r, hit.color.g, hit.color.b);
 		}
 	}
 	return (hit);
