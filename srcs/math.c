@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 20:43:56 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/19 01:05:35 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/23 02:48:49 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,4 +118,63 @@ int		ft_same_vector(t_vector3 v1, t_vector3 v2)
 	if (v1.x == v2.x && v1.y == v2.y && v1.z == v2.z)
 		return (TRUE);
 	return (FALSE);
+}
+
+
+// t_vector3	rotate_vector(t_vector3 v, t_vector3 rot)
+// {
+// 	t_vector3 tmp;
+
+// 	tmp = v;
+// 	v.y = tmp.y * cosf(rot.x) + v.z * sinf(rot.x);
+// 	v.z = -tmp.y * sinf(rot.x) + v.z * cosf(rot.x);
+	
+// 	v.x = tmp.x * cosf(rot.y) + v.z * sinf(rot.y);
+// 	v.z = -tmp.x * sinf(rot.y) + v.z * cosf(rot.y);
+
+// 	tmp = v;
+// 	v.x = tmp.x * cosf(rot.z) - tmp.y * sinf(rot.z);
+// 	v.y = tmp.x * sinf(rot.z) + tmp.y * sinf(rot.z);
+// 	return (v);
+// }
+
+
+t_vector3	rotate_x(t_vector3 v, float angle)
+{
+	float py;
+
+	py = v.y;
+	v.y = py * cos(angle) + v.z * sin(angle);
+	v.z = -py * sin(angle) + v.z * cos(angle);
+	return (v);
+}
+
+t_vector3	rotate_y(t_vector3 v, float angle)
+{
+	float px;
+
+	px = v.x;
+	v.x = px * cos(angle) + v.z * sin(angle);
+	v.z = -px * sin(angle) + v.z * cos(angle);
+	return (v);
+}
+
+t_vector3	rotate_z(t_vector3 v, float angle)
+{
+	float px;
+	float py;
+
+	px = v.x;
+	py = v.y;
+	v.x = px * cos(angle) - py * sin(angle);
+	v.y = px * sin(angle) + py * cos(angle);
+	return (v);
+}
+
+t_vector3	rotate_vector(t_vector3 v, t_vector3 rot)
+{
+	v = rotate_y(v, rot.y);
+	v = rotate_x(v, rot.x);
+	v = rotate_z(v, rot.z);
+	return (v);
 }

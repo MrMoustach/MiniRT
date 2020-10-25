@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/22 20:05:49 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/25 03:56:06 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 	t_ray	r;
 	clock_t t;
 	float tt;
-	
+	static int test = 0;
 	j = 0;
 	t = clock();
 	camera = ft_get_cam(scene, flag,mov, rot);
@@ -125,6 +125,11 @@ void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 			i++;
 		}
 		j++;
+	}
+	if (test == 0)
+	{
+		printf("test");
+		test = save_bmp("test.bmp", scene.config, (int *)img.addr);
 	}
 	mlx_put_image_to_window(cnx,win,img.img,0,0);
 	char *firstLine[] = {

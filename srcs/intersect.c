@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/22 20:44:18 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/24 02:08:45 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,21 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 	return (hit);
 }
 
+t_vector3	rotation_cy(t_cylinder cy)
+{
+	t_vector3	tmp;
+	t_vector3	rot;
+
+	tmp = cy.n;
+	tmp.x = 0;
+	rot.x = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
+	tmp = cy.n;
+	tmp.z = 0;
+	rot.z = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
+	rot.y = 0;
+	return (rot);
+}
+
 t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 {
 	float	a;
@@ -130,7 +145,25 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	float	delta;
 	t_hit	hit;
 	t_vector3	pos;
+	t_vector3	rot;
+	static bool debug1 = FALSE;
+	static bool debug2 = FALSE;
 
+	// //rot = rotation_cy(cy);
+	// if(!debug1)
+	// {	
+	// 	printf("rot : %f %f %f\n",rot.x, rot.y, rot.z, debug1 = TRUE);
+	// 	printf("before : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
+	// }
+	
+	// //ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
+	// //ray.p2 = rotate_vector(ray.p2, ft_multi(rot, -1));
+	
+	// if(!debug2)
+	// {	
+	// 	printf("after : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
+	// 	debug2 = TRUE;
+	// }
 	pos = ft_minus(ray.p1, cy.c);
 	a = (ray.p2.x * ray.p2.x) + (ray.p2.z * ray.p2.z);
 	b = 2 * ((pos.x * ray.p2.x) + (pos.z * ray.p2.z));
@@ -139,6 +172,7 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	hit.hit = FALSE;
 	if (delta > 0)
 	{
+		//printf("before : %f %f %f\n",rot.x, rot.y, rot.z);
 		hit.sol = -b + sqrtf(delta) / (2.0 * a);
 		if (hit.sol > -b - sqrtf(delta) / (2.0 * a))
 			hit.sol = -b - sqrtf(delta) / (2.0 * a);
@@ -151,6 +185,7 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 		{
 			hit.hit = TRUE;
 			hit.normal = ft_normalize(ft_minus(vector3(cy.c.x, cy.c.y + cy.h / 2 , cy.c.z), hit.p));
+			//hit.normal = rotate_vector(hit.normal, ft_multi(rot, 1 ));
 			// hit.normal = ft_normalize(ft_minus(cy.c, hit.p));
 			hit.id = cy.id;
 			hit.ray = ray;
@@ -160,6 +195,8 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	}
 	return (hit);
 }
+
+
 
 t_hit	ft_tr_intersect(t_ray ray, t_triangle tr)
 {

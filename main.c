@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/19 17:48:03 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/25 03:05:08 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int keys(int key, void *param)
 int main(int argc, char *argv[])
 {
 	t_scene scene;
+
 	if (argc > 3 || argc < 2)
 	{
 		ft_putstr_fd("Error\n",1);
@@ -73,5 +74,6 @@ int main(int argc, char *argv[])
 	mlx_key_hook(win,keys,&scene);
 	ft_render(scene, 0, vector3(0, 0, 0), vector3(0, 0, 0));
 	//mlx_put_image_to_window(cnx,win,img.img,0,0);
+	
 	mlx_loop(cnx);
-}
+} 
