@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/25 03:56:06 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/27 23:33:18 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,27 +128,26 @@ void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 	}
 	if (test == 0)
 	{
-		printf("test");
-		test = save_bmp("test.bmp", scene.config, (int *)img.addr);
+		test = save_bmp("hey.bmp", scene.config, (int *)mlx_get_data_addr(img.img, &img.bpp, &img.line_length, &img.endian));
 	}
 	mlx_put_image_to_window(cnx,win,img.img,0,0);
-	char *firstLine[] = {
-						"Camera id :", 
-						ft_itoa(camera.id), 
-						"Pos : (", 
-						ft_itoa(camera.ray.p1.x), 
-						ft_itoa(camera.ray.p1.y), 
-						ft_itoa(camera.ray.p1.z), 
-						")",
-						"Rot : (",
-						ft_itoa(camera.ray.p2.x), 
-						ft_itoa(camera.ray.p2.y), 
-						ft_itoa(camera.ray.p2.z), 
-						")",
-						"FOV :",
-						ft_itoa(camera.fov/(M_PI/180))
-						};
-	mlx_string_put(cnx, win, 50, 50, 0xffffff, concatenate(14, firstLine, " "));
+	// char *firstLine[] = {
+	// 					"Camera id :", 
+	// 					ft_itoa(camera.id), 
+	// 					"Pos : (", 
+	// 					ft_itoa(camera.ray.p1.x), 
+	// 					ft_itoa(camera.ray.p1.y), 
+	// 					ft_itoa(camera.ray.p1.z), 
+	// 					")",
+	// 					"Rot : (",
+	// 					ft_itoa(camera.ray.p2.x), 
+	// 					ft_itoa(camera.ray.p2.y), 
+	// 					ft_itoa(camera.ray.p2.z), 
+	// 					")",
+	// 					"FOV :",
+	// 					ft_itoa(camera.fov/(M_PI/180))
+	// 					};
+	// mlx_string_put(cnx, win, 50, 50, 0xffffff, concatenate(14, firstLine, " "));
 	t = clock() - t;
 	tt = ((double)t)/CLOCKS_PER_SEC;
 	printf("It took %f s to render this frame\n", tt);
