@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/27 23:32:09 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/28 01:05:01 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_rgb	rgb(int x, int y, int z);
 int			plane_intersect(t_ray r, t_plane p, float *t);
 t_plane	plane(t_vector3 p, t_vector3 n, t_rgb c);
 float	ft_parse_float(char *s);
-t_scene	ft_parse(char *file);
+t_scene	ft_parse(t_scene s, char *file);
 t_cam		cam(t_ray ray, int fov);
 void    ft_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot);
 t_rgb	ft_calc_light(t_scene scene, t_hit hit);

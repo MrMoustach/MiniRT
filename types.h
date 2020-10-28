@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/27 04:20:10 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/28 01:03:08 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ typedef struct	s_scene
 	int			light_count;
 	t_ambient	am;
 	int			err_code;
+	int			save;
 }				t_scene;
 typedef	struct s_img
 {

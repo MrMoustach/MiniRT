@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/25 03:05:08 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/28 01:05:44 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,34 @@ int keys(int key, void *param)
 	return (0);    
 }
 
+t_scene		argument_handler(t_scene scene, char **argv, int argc)
+{
+	scene.err_code = 0;
+	scene.save = 0;
+	if (argc > 3 || argc < 2)
+	{
+		scene.err_code = -19;
+	}
+	if (argc == 3)
+	{	
+		if (ft_strncmp(argv[2], "--save", 10) == 0)
+			scene.save = 1;
+		else
+			scene.err_code = -20;
+	}
+	return (scene);
+}
+
 int main(int argc, char *argv[])
 {
 	t_scene scene;
 
-	if (argc > 3 || argc < 2)
-	{
-		ft_putstr_fd("Error\n",1);
-		return (0);
-	}
-	scene = ft_parse(argv[1]);
+	scene = argument_handler(scene, argv, argc);
+	if (scene.err_code == 0)
+		scene = ft_parse(scene, argv[1]);
 	if (scene.err_code < 0)
 	{
-		printf("there was an error with the code {%d} //hey implement error msgs dumbass", scene.err_code);
+		printf("there was an error with the code {%d} //hey implement error msgs dumbass\n", scene.err_code);
 		return (-1);
 	}
 	cnx = mlx_init();
@@ -74,6 +89,6 @@ int main(int argc, char *argv[])
 	mlx_key_hook(win,keys,&scene);
 	ft_render(scene, 0, vector3(0, 0, 0), vector3(0, 0, 0));
 	//mlx_put_image_to_window(cnx,win,img.img,0,0);
-	
-	mlx_loop(cnx);
+	if (scene.save == 0)
+		mlx_loop(cnx);
 } 

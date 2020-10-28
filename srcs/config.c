@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/19 17:18:45 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/28 01:04:40 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,13 +317,14 @@ void init_scene(t_scene *scene)
 	(*scene).lights = NULL;
 	(*scene).objects = NULL;
 }
-t_scene	ft_parse(char *file)
+t_scene	ft_parse(t_scene s, char *file)
 {
 	char	*line;
 	t_scene	scene;
 	int fd;
 	int	n;
 	
+	scene = s;
 	fd = open(file, O_RDONLY);
 	init_scene(&scene);
 	while ((n = get_next_line(fd, &line)))

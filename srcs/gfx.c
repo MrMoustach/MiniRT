@@ -17,7 +17,6 @@ void put_pix(double x, double y, int color)
 {
     char    *dst;
     
-    //mlx_pixel_put(cnx, win, x, y,color);
     dst = img.addr + (int)round(y * img.line_length + x * (img.bpp / 8));
     *(unsigned int*)dst = color;
 }
@@ -79,12 +78,11 @@ int						save_bmp(const char *filename, t_config config, int *image)
 	unsigned	char	*header[2];
 	int				x;
 	int 				fd;
-	char				c;
 	int				y;
 
 	header[0] = bmp_file_header(4 * config.width * config.height + 54);
 	header[1] = bmp_info_header(config);
-	fd = open("./image.bmp", O_WRONLY | O_CREAT | O_TRUNC, 777);
+	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 777);
 	write(fd, header[0], 14);
 	free(header[0]);
 	write(fd, header[1], 40);
