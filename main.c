@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/28 01:05:44 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/30 02:18:28 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ t_scene		argument_handler(t_scene scene, char **argv, int argc)
 	scene.save = 0;
 	if (argc > 3 || argc < 2)
 	{
-		scene.err_code = -19;
+		scene.err_code = -4;
 	}
 	if (argc == 3)
 	{	
 		if (ft_strncmp(argv[2], "--save", 10) == 0)
 			scene.save = 1;
 		else
-			scene.err_code = -20;
+			scene.err_code = -3;
 	}
 	return (scene);
 }
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 		scene = ft_parse(scene, argv[1]);
 	if (scene.err_code < 0)
 	{
-		printf("there was an error with the code {%d} //hey implement error msgs dumbass\n", scene.err_code);
+		printf("there was an error with the code {%d} in line [%d] //hey implement error msgs dumbass\n", scene.err_code, scene.line + 1);
 		return (-1);
 	}
 	cnx = mlx_init();
@@ -88,7 +88,9 @@ int main(int argc, char *argv[])
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_length, &img.endian);
 	mlx_key_hook(win,keys,&scene);
 	ft_render(scene, 0, vector3(0, 0, 0), vector3(0, 0, 0));
-	//mlx_put_image_to_window(cnx,win,img.img,0,0);
 	if (scene.save == 0)
 		mlx_loop(cnx);
+	else
+		save_bmp("hey.bmp", scene.config, (int *)mlx_get_data_addr(img.img, &img.bpp, &img.line_length, &img.endian));
+	
 } 

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/28 01:04:40 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/30 02:38:42 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,6 @@ char	*format_line(char *line)
 		i++;
 	}
 	ret[j] = '\0';
-	j = checkSum_line(line);
-	if (j < 0)
-		ret[0] = '0' + abs(j);
 	free(line);
 	return (ret);
 }
@@ -272,21 +269,45 @@ t_config	ft_check_res(t_config config)
 		config.height = 1440;
 	return (config);
 }
-void	ft_line_parse(char *line,t_scene *scene)
+void		parse_config(char **tab, t_scene *scene)
+{
+	int	width;
+	int height;
+
+	if (!tab[1] || !tab[2])
+		scene->err_code = -7;
+	if (scene->config.set == 1)
+		scene->err_code = -6;
+	width = ft_atoi(tab[1]);
+	height = ft_atoi(tab[2]);
+	if (width <= 0)
+		scene->err_code = -8;
+	if (height <= 0)
+		scene->err_code = -9;
+	if (scene->err_code < 0)
+		return ;
+	(*scene).config.width = width;
+	(*scene).config.height = height;
+	(*scene).config = ft_check_res((*scene).config);
+	(*scene).config.set = 1;
+	
+}
+int		ft_line_parse(char *line,t_scene *scene)
 {
 	char	**tab;
 	int		type;
 	
+	if (*line == '\0')
+	{
+		scene->err_code = -2;
+		return (0);
+	}
 	tab = ft_split(line, ' ');
 	type = get_type(tab[0]);
 	if (type == -1)
-		return ;
+		return (1);
 	if (type == 0)
-	{
-		(*scene).config.width = ft_atoi(tab[1]);
-		(*scene).config.height = ft_atoi(tab[2]);
-		(*scene).config = ft_check_res((*scene).config);
-	}
+		parse_config(tab, scene);
 	if (type > 3)
 		(*scene).obj_count++;
 	if (type == 1)
@@ -305,6 +326,7 @@ void	ft_line_parse(char *line,t_scene *scene)
 		parse_cylinder(tab, scene);
 	else if (type == 8)
 		parse_triangle(tab, scene);
+	return (1);
 }
 
 void init_scene(t_scene *scene)
@@ -316,6 +338,21 @@ void init_scene(t_scene *scene)
 	(*scene).cams = NULL;
 	(*scene).lights = NULL;
 	(*scene).objects = NULL;
+	(*scene).config.width = 0;
+	(*scene).config.height = 0;
+	(*scene).config.set = 0;
+	(*scene).line = 0;
+}
+int		check_rt_file(char *file)
+{
+	char *file_at_point;
+
+	file_at_point = ft_strrchr(file, '.') + 1;
+	if (file_at_point == (char *)1)
+		return (-1);
+	if (ft_strncmp(file_at_point, "rt", 3))
+		return (-1);
+	return (1);
 }
 t_scene	ft_parse(t_scene s, char *file)
 {
@@ -325,17 +362,20 @@ t_scene	ft_parse(t_scene s, char *file)
 	int	n;
 	
 	scene = s;
-	fd = open(file, O_RDONLY);
+	if ((scene.err_code = check_rt_file(file)) < 0)
+		return (scene);
+	if ((fd = open(file, O_RDONLY)) < 0)
+	{
+		scene.err_code = -5;
+		return (scene);
+	}
 	init_scene(&scene);
 	while ((n = get_next_line(fd, &line)))
 	{
 		line = format_line(line);
-		if (ft_isdigit(*line))
-		{
-			scene.err_code = (*line - '0') * -1;
-			break ;
-		}
-		ft_line_parse(line, &scene);
+		scene.line++;
+		if (ft_line_parse(line, &scene) == 0)
+			return (scene);
 		free(line);
 	}
 	if (scene.err_code >= 0)

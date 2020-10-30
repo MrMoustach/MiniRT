@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/28 01:05:34 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/28 23:49:56 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,6 @@ void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 		j++;
 	}
 	mlx_put_image_to_window(cnx,win,img.img,0,0);
-	if (scene.save == 1)
-		save_bmp("hey.bmp", scene.config, (int *)mlx_get_data_addr(img.img, &img.bpp, &img.line_length, &img.endian));
 	char *firstLine[] = {
 						"Camera id :", 
 						ft_itoa(camera.id), 

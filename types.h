@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/28 01:03:08 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/30 02:33:58 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct	s_config
 {
 	int			width;
 	int			height;
+	int			set;
 }				t_config;
 
 typedef struct	s_vector3
@@ -132,6 +133,7 @@ typedef struct	s_scene
 	int			light_count;
 	t_ambient	am;
 	int			err_code;
+	int			line;
 	int			save;
 }				t_scene;
 typedef	struct s_img
@@ -142,39 +144,5 @@ typedef	struct s_img
 	int		line_length;
 	int		endian;
 } t_img;
-typedef	struct	s_header
-{
-	int		width;
-	int		height;
-	int		bitcount;
-	int		width_in_bytes;
-	int		imagesize;
-	int		bisize;
-	int		bfoffbits;
-	int		filesize;
-	int		biplanes;
-	int		col1;
-	int		col2;
-}				t_header;
-
-typedef struct		s_bmp_file
-{
-	char			byte_type[2];
-	unsigned int	byte_size;
-	unsigned int	byte_reserved;
-	unsigned int	byte_offset;
-	unsigned		header_size;
-	int				image_width;
-	int				image_height;
-	unsigned short	color_planes;
-	unsigned short	bits_per_pixel;
-	unsigned int	compression;
-	unsigned int	image_size;
-	int				bits_xpels_per_meter;
-	int				bits_ypels_per_meter;
-	unsigned int	total_colors;
-	unsigned int	important_colors;
-}					t_bmp_file;
-
 
 #endif

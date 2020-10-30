@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/24 02:08:45 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/30 01:20:07 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 		if (!hit.hit)
 			hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p4, sq.p3, sq.color));
 		hit.normal = sq.n;
+		// if (ft_dot(hit.normal, ray.p2) <= 1e-6)
+		// 	printf("t\n");
 	}
 	return (hit);
 }
