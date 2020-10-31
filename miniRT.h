@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/28 01:05:01 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/31 01:52:22 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,9 @@ int	get_type(char *type);
 int		checkSum_line(char *line);
 void	free_tab(char **tab);
 t_vector3	rotate_vector(t_vector3 v, t_vector3 rot);
-
 int		save_bmp(const char *filename, t_config config, int *image);
+int     ft_string_is_float(char *s);
+t_rgb   ft_is_color_good(char **tab);
 
 
 void        *cnx;

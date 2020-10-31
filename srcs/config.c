@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/30 02:38:42 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/31 05:12:58 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,34 @@ void	free_tab(char **tab)
 		free(tab[i++]);
 	free(tab);
 }
-t_ambient	parse_ambient(char **tab)
-{
-	char **color;
-	t_ambient am;
 
+t_ambient	parse_ambient(char **tab, t_scene *scene)
+{
+	char		**color;
+	t_ambient	am;
+	float		intensity;
+	t_rgb		c;
+
+	if (scene->am.set == 1)
+		scene->err_code = -11;
+	if (!tab[1] || !tab[2])
+		scene->err_code = -12;
+	if (tab[3] != '\0')
+		scene->err_code = -13;
+	if (scene->err_code < 0)
+		return am;
+	if (!ft_string_is_float(tab[1]))
+		scene->err_code = -14;
+	intensity = ft_parse_float(tab[1]);
 	color = ft_split(tab[2], ',');
-	am = ambient(ft_parse_float(tab[1]), rgb(ft_atoi(color[0]), ft_atoi(color[1]), ft_atoi(color[2])));
+	if (!color[0] || !color[1] || !color[2])
+		scene->err_code = -15;
+	c = ft_is_color_good(color);
+	if (c.r < 0)
+		scene->err_code = -15;
+	am = ambient(intensity , c);
 	free_tab(color);
+	am.set = 1;
 	return(am);
 }
 
@@ -276,8 +296,12 @@ void		parse_config(char **tab, t_scene *scene)
 
 	if (!tab[1] || !tab[2])
 		scene->err_code = -7;
+	if (tab[3] != '\0')
+		scene->err_code = -10;
 	if (scene->config.set == 1)
 		scene->err_code = -6;
+	if (scene->err_code < 0)
+		return ;
 	width = ft_atoi(tab[1]);
 	height = ft_atoi(tab[2]);
 	if (width <= 0)
@@ -311,7 +335,7 @@ int		ft_line_parse(char *line,t_scene *scene)
 	if (type > 3)
 		(*scene).obj_count++;
 	if (type == 1)
-		(*scene).am = parse_ambient(tab);
+		(*scene).am = parse_ambient(tab, scene);
 	else if(type == 2)
 		parse_cam(tab,scene);
 	else if (type == 3)
@@ -326,7 +350,7 @@ int		ft_line_parse(char *line,t_scene *scene)
 		parse_cylinder(tab, scene);
 	else if (type == 8)
 		parse_triangle(tab, scene);
-	return (1);
+	return (scene->err_code);
 }
 
 void init_scene(t_scene *scene)
@@ -342,6 +366,7 @@ void init_scene(t_scene *scene)
 	(*scene).config.height = 0;
 	(*scene).config.set = 0;
 	(*scene).line = 0;
+	(*scene).am.set = 0;
 }
 int		check_rt_file(char *file)
 {
@@ -374,7 +399,8 @@ t_scene	ft_parse(t_scene s, char *file)
 	{
 		line = format_line(line);
 		scene.line++;
-		if (ft_line_parse(line, &scene) == 0)
+		//TODO : fix this shit
+		if (ft_line_parse(line, &scene) < 0)
 			return (scene);
 		free(line);
 	}

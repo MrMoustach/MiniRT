@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/30 02:33:58 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/10/31 01:21:20 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ typedef struct	s_ambient
 {
 	float		bright;
 	t_rgb		color;
+	int			set;
 }				t_ambient;
 typedef struct	s_plane
 {
