@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/31 01:52:22 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/01 01:52:26 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ void	free_tab(char **tab);
 t_vector3	rotate_vector(t_vector3 v, t_vector3 rot);
 int		save_bmp(const char *filename, t_config config, int *image);
 int     ft_string_is_float(char *s);
+int     ft_string_is_int(char *s);
 t_rgb   ft_is_color_good(char **tab);
+t_vector3   ft_is_point_good(char **tab, int *err);
+t_vector3   ft_is_direction_good(char **tab, int *err);
 
 
 void        *cnx;

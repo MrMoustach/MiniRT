@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/31 05:12:58 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/01 01:56:27 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ t_ambient	parse_ambient(char **tab, t_scene *scene)
 	if (tab[3] != '\0')
 		scene->err_code = -13;
 	if (scene->err_code < 0)
-		return am;
+		return am; //TODO : Free shit here
 	if (!ft_string_is_float(tab[1]))
 		scene->err_code = -14;
 	intensity = ft_parse_float(tab[1]);
@@ -161,14 +161,25 @@ void	parse_cam(char **tab, t_scene *scene)
 	t_ray	ray;
 	t_cam	*c;
 	char	**t;
+	int		err;
 
 	c = (t_cam *)malloc(sizeof(t_cam));
+	if (!tab[1] || !tab[2] || !tab[3] || tab[4])
+		scene->err_code = -16;
+	if (scene->err_code < 0)
+		return (free(c));
 	t = ft_split(tab[1], ',');
-	ray.p1 = vector3(ft_parse_float(t[0]),ft_parse_float(t[1]),ft_parse_float(t[2]));
+	ray.p1 = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -17;
 	free_tab(t);
 	t = ft_split(tab[2],',');
-	ray.p2 = vector3(ft_parse_float(t[0]),ft_parse_float(t[1]),ft_parse_float(t[2]));
+	ray.p2 = ft_is_direction_good(t, &err);
+	if (err < 0)
+		scene->err_code = -18;
 	free_tab(t);
+	if (!ft_string_is_int(tab[3]))
+		scene->err_code = -19;
 	(*c) = cam(ray,ft_atoi(tab[3]));
 	(*c).id = (*scene).cam_count;
 	(*scene).cam_count++;
