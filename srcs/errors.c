@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 03:29:39 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 05:38:55 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 05:55:43 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,30 @@ int ft_err(t_scene scene)
     if (scene.err_code == -35)
         ft_printf("Okay, imma dumb this for you, its a size, for a square, it must be a positive float, thank you\n");
     if (scene.err_code == -36)
-        ft_printf("Your cylinder isnt quite a cylinder, (cy x.y.z x,y,z r h r,g,b)\n");
+        ft_printf("Square, color, ([0-255],[0-255],[0-255])\n");
     if (scene.err_code == -37)
-        ft_printf("\n");
+        ft_printf("Your cylinder isnt quite a cylinder, (cy x.y.z x,y,z r h r,g,b)\n");
+    if (scene.err_code == -38)
+        ft_printf("Cylinders origin should be (x,y,z) ma dude\n");
+    if (scene.err_code == -39)
+        ft_printf("The more you know : Cylinder normal should be (x,y,z) unlike you grades in highschool atleast one of the parameters should be different from 0\n");
+    if (scene.err_code == -40)
+        ft_printf("Sir cylinder must have a thickness, so the diameter should be a positive float\n");
+    if (scene.err_code == -41)
+        ft_printf("Its a cylinder bro, it needs some positive height\n");
+    if (scene.err_code == -42)
+        ft_printf("Unlike you, the cylinder isn't sad, it needs some color ([0-255],[0-255],[0-255])\n");
+    if (scene.err_code == -43)
+        ft_printf("Triangles needs more love, provide the right amount of parameter sir\n");
+    if (scene.err_code == -44)
+        ft_printf("Wahd : triangles first point is quite right (x,y,z)\n");
+    if (scene.err_code == -45)
+        ft_printf("Joj : This is the second point, it needs to be (x,y,z)\n");
+    if (scene.err_code == -46)
+        ft_printf("Tlata : Finally, the third point should be (x,y,z) too, i mean you managed to fix the first 2 dude what's up ?\n");
+    if (scene.err_code == -47)
+        ft_printf("We coloring, Colors are great, with this simple paramter add color to you triangle ([0-255],[0-255],[0-255])\n");
+    if (scene.err_code == -48)
+        ft_printf("Ouf, I think you have the wrong number, i mean the object you gave isn't supported, call us later\n");
     return (0);
 }
