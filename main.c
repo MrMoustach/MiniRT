@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/31 05:13:55 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 04:47:05 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int keys(int key, void *param)
 		ft_re_render(scene, 0, vector3(0, 0, 0), vector3(0.1, 0, 0));
 	if (key == KEY_8)
 		ft_re_render(scene, 0, vector3(0, 0, 0), vector3(0, 0.1, 0));
-	printf("%d\n",key);
+	ft_printf("%d\n",key);
 	return (0);    
 }
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 		scene = ft_parse(scene, argv[1]);
 	if (scene.err_code < 0)
 	{
-		printf("there was an error with the code {%d} in line [%d] //hey implement error msgs dumbass\n", scene.err_code, scene.line + 1);
+		ft_err(scene);
 		return (-1);
 	}
 	cnx = mlx_init();

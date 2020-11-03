@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/01 01:56:27 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 04:54:16 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		checkSum_line(char *line)
 	free_tab(tab);
 	if(type < -1 || type > 8)
 		return(-1);
-	//printf("%d %s\n",type,line);
+	//ft_printf("%d %s\n",type,line);
 	return (0);
 }
 
@@ -102,8 +102,8 @@ t_ambient	parse_ambient(char **tab, t_scene *scene)
 	if (tab[3] != '\0')
 		scene->err_code = -13;
 	if (scene->err_code < 0)
-		return am; //TODO : Free shit here
-	if (!ft_string_is_float(tab[1]))
+		return am;
+	if (!ft_string_is_good_intensity(tab[1]))
 		scene->err_code = -14;
 	intensity = ft_parse_float(tab[1]);
 	color = ft_split(tab[2], ',');
@@ -124,33 +124,52 @@ void	parse_sphere(char **tab, t_scene *scene)
 	t_rgb color;
 	char **t;
 	t_object *ob;
+	int		err;
 
+	if (!tab[1] || !tab[2] || !tab[3] || tab[4])
+		return ((void)(scene->err_code = -24));
 	ob = (t_object *)malloc(sizeof(t_object));
 	t = ft_split(tab[1],',');
-	v = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -25;
 	free_tab(t);
 	t = ft_split(tab[3],',');
-	color = rgb(ft_atoi(t[0]), ft_atoi(t[1]), ft_atoi(t[2]));
+	color = ft_is_color_good(t);
+	if (color.r < 0)
+		scene->err_code = -26;
 	free_tab(t);
+	if (!ft_string_is_good_diameter(tab[2]))
+		scene->err_code = -27;
 	(*ob).sp = sphere(v, ft_parse_float(tab[2]), color);
 	(*ob).type = 4;
 	(*ob).sp.id = scene->obj_count - 1;
 	ft_lstadd_back(&((*scene).objects), ft_lstnew(ob));
 }
+
 void	parse_light(char **tab, t_scene *scene)
 {
 	t_vector3	v;
 	t_rgb		color;
 	char		**t;
 	t_light		*l;
+	int			err;
 	
+	if (!tab[1] || !tab[2] || !tab[3] || tab[4])
+		return ((void)(scene->err_code = -20));
 	l = (t_light *)malloc(sizeof(t_light));
 	t = ft_split(tab[1],',');
-	v = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -21;
 	free_tab(t);
 	t = ft_split(tab[3],',');
-	color = rgb(ft_atoi(t[0]), ft_atoi(t[1]), ft_atoi(t[2]));
+	color = ft_is_color_good(t);
+	if (color.r < 0)
+		scene->err_code = -22;
 	free_tab(t);
+	if (!ft_string_is_good_intensity(tab[2]))
+		scene->err_code = -23;
 	*l = light(v, color, ft_parse_float(tab[2]));
 	(*scene).light_count++;
 	ft_lstadd_back(&(*scene).lights, ft_lstnew(l));
@@ -163,11 +182,9 @@ void	parse_cam(char **tab, t_scene *scene)
 	char	**t;
 	int		err;
 
-	c = (t_cam *)malloc(sizeof(t_cam));
 	if (!tab[1] || !tab[2] || !tab[3] || tab[4])
-		scene->err_code = -16;
-	if (scene->err_code < 0)
-		return (free(c));
+		return ((void)(scene->err_code = -16));
+	c = (t_cam *)malloc(sizeof(t_cam));
 	t = ft_split(tab[1], ',');
 	ray.p1 = ft_is_point_good(t, &err);
 	if (err < 0)
@@ -193,16 +210,25 @@ void	parse_plane(char **tab, t_scene *scene)
 	t_rgb 		r;
 	t_object	*ob;
 	char		**t;
+	int			err;
 
+	if (!tab[1] || !tab[2] || !tab[3] || tab[4])
+		return ((void)(scene->err_code = -28));
 	ob = (t_object *)malloc(sizeof(t_object));
 	t = ft_split(tab[1],',');
-	v = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -29;
 	free_tab(t);
 	t = ft_split(tab[2],',');
-	v2 = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v2 = ft_is_direction_good(t, &err);
+	if (err < 0)
+		scene->err_code = -30;
 	free_tab(t);
 	t = ft_split(tab[3],',');
-	r = rgb(ft_atoi(t[0]), ft_atoi(t[1]), ft_atoi(t[2]));
+	r = ft_is_color_good(t);
+	if (r.r < 0)
+		scene->err_code = -31;
 	free_tab(t);
 	(*ob).plane = plane(v, v2, r);
 	(*ob).plane.id = scene->obj_count - 1;
@@ -216,21 +242,30 @@ void	parse_square(char **tab, t_scene *scene)
 	t_vector3	v2;
 	t_rgb 		r;
 	t_object	*ob;
-	float		size;
 	char		**t;
+	int			err;
 
+	if (!tab[1] || !tab[2] || !tab[3] || !tab[4] || tab[5])
+		return ((void)(scene->err_code = -32));
 	ob = (t_object *)malloc(sizeof(t_object));
 	t = ft_split(tab[1],',');
-	v = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -33;
 	free_tab(t);
 	t = ft_split(tab[2],',');
-	v2 = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v2 = ft_is_direction_good(t, &err);
+	if (err < 0)
+		scene->err_code = -34;
 	free_tab(t);
-	size = ft_atoi(tab[3]);
+	if (!ft_string_is_good_diameter(tab[3]))
+		scene->err_code = -35;
 	t = ft_split(tab[4],',');
-	r = rgb(ft_atoi(t[0]), ft_atoi(t[1]), ft_atoi(t[2]));
+	r = ft_is_color_good(t);
+	if (r.r < 0)
+		scene->err_code = -36;
 	free_tab(t);
-	(*ob).square = square(v, v2, size,r);
+	(*ob).square = square(v, v2, ft_parse_float(tab[3]),r);
 	(*ob).square.id = scene->obj_count - 1;
 	(*ob).type = 6;
 	ft_lstadd_back(&((*scene).objects), ft_lstnew(ob));
@@ -242,23 +277,32 @@ void	parse_cylinder(char **tab, t_scene *scene)
 	t_vector3	v2;
 	t_rgb 		r;
 	t_object	*ob;
-	float		d;
-	float		h;
 	char		**t;
+	int			err;
 
+	if (!tab[1] || !tab[2] || !tab[3] || !tab[4] || !tab[5] || tab[6])
+		return ((void)(scene->err_code = -32));
 	ob = (t_object *)malloc(sizeof(t_object));
 	t = ft_split(tab[1],',');
-	v = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -38;
 	free_tab(t);
 	t = ft_split(tab[2],',');
-	v2 = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v2 = ft_is_direction_good(t, &err);
+	if (err < 0)
+		scene->err_code = -39;
 	free_tab(t);
-	d = ft_atoi(tab[3]);
-	h = ft_atoi(tab[4]);
+	if (!ft_string_is_good_diameter(tab[3]))
+		scene->err_code = -40;
+	if (!ft_string_is_good_diameter(tab[4]))
+		scene->err_code = -41;
 	t = ft_split(tab[5],',');
-	r = rgb(ft_atoi(t[0]), ft_atoi(t[1]), ft_atoi(t[2]));
+	r = ft_is_color_good(t);
+	if (r.r < 0)
+		scene->err_code = -32;
 	free_tab(t);
-	(*ob).cylinder = cylinder(v, v2, d, h, r);
+	(*ob).cylinder = cylinder(v, v2, ft_parse_float(tab[3]), ft_parse_float(tab[4]), r);
 	(*ob).cylinder.id = scene->obj_count - 1;
 	(*ob).type = 7;
 	ft_lstadd_back(&((*scene).objects), ft_lstnew(ob));
@@ -272,19 +316,30 @@ void	parse_triangle(char **tab, t_scene *scene)
 	t_rgb 		r;
 	t_object	*ob;
 	char		**t;
+	int			err;
 
+	if (!tab[1] || !tab[2] || !tab[3] || !tab[4] || tab[5])
+		return ((void)(scene->err_code = -43));
 	ob = (t_object *)malloc(sizeof(t_object));
 	t = ft_split(tab[1],',');
-	v = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -44;
 	free_tab(t);
 	t = ft_split(tab[2],',');
-	v2 = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v2 = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -45;
 	free_tab(t);
 	t = ft_split(tab[3],',');
-	v3 = vector3(ft_parse_float(t[0]), ft_parse_float(t[1]), ft_parse_float(t[2]));
+	v3 = ft_is_point_good(t, &err);
+	if (err < 0)
+		scene->err_code = -46;
 	free_tab(t);
 	t = ft_split(tab[4],',');
-	r = rgb(ft_atoi(t[0]), ft_atoi(t[1]), ft_atoi(t[2]));
+	r = ft_is_color_good(t);
+	if (r.r < 0)
+		scene->err_code = -47;
 	free_tab(t);
 	(*ob).triangle = triangle(v, v2, v3, r);
 	(*ob).triangle.id = scene->obj_count - 1;
@@ -333,10 +388,7 @@ int		ft_line_parse(char *line,t_scene *scene)
 	int		type;
 	
 	if (*line == '\0')
-	{
-		scene->err_code = -2;
-		return (0);
-	}
+		return (scene->err_code = -2);
 	tab = ft_split(line, ' ');
 	type = get_type(tab[0]);
 	if (type == -1)
@@ -361,6 +413,9 @@ int		ft_line_parse(char *line,t_scene *scene)
 		parse_cylinder(tab, scene);
 	else if (type == 8)
 		parse_triangle(tab, scene);
+	else if (type == 9)
+		scene->err_code = -48;
+	
 	return (scene->err_code);
 }
 
@@ -397,6 +452,7 @@ t_scene	ft_parse(t_scene s, char *file)
 	int fd;
 	int	n;
 	
+	// FIXME: need to test if resolution and ambient are supplied
 	scene = s;
 	if ((scene.err_code = check_rt_file(file)) < 0)
 		return (scene);
@@ -410,7 +466,6 @@ t_scene	ft_parse(t_scene s, char *file)
 	{
 		line = format_line(line);
 		scene.line++;
-		//TODO : fix this shit
 		if (ft_line_parse(line, &scene) < 0)
 			return (scene);
 		free(line);

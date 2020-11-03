@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 20:05:02 by iharchi           #+#    #+#             */
-/*   Updated: 2020/03/04 20:37:11 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 01:25:01 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,24 @@ int		count_zeros(char *s)
 		i++;
 	return (i);
 }
+
+int		is_negativ(char *s)
+{
+	int	n;
+	int	i;
+
+	n = ft_strlen(s);
+	while (i < n)
+	{
+		if (s[i] == '-')
+			return (-1);
+		if (ft_isdigit(s[i]) || s[i] == '.')
+			return (1);
+		i++;
+	}
+	return (1);
+}
+
 float	ft_parse_float(char *s)
 {
 	int		p;
@@ -56,12 +74,8 @@ float	ft_parse_float(char *s)
 
 	p = ft_lookfor(s, '.');
 	nbr = ft_atoi(s);
-	signe = 1;
-	if (nbr < 0)
-	{
-		signe = -1;
-		nbr *= -1;
-	}
+	signe = is_negativ(s);
+	nbr *= signe;
 	if (p >= 0)
 		nbr2 = ft_atoi(&s[p + 1]);
 	nbr += nbr2 / powf(10, ft_size(nbr2) + 1 + count_zeros(&s[p + 1]));

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/30 01:20:07 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 03:15:44 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 			hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p4, sq.p3, sq.color));
 		hit.normal = sq.n;
 		// if (ft_dot(hit.normal, ray.p2) <= 1e-6)
-		// 	printf("t\n");
+		// 	ft_printf("t\n");
 	}
 	return (hit);
 }
@@ -154,8 +154,8 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	// //rot = rotation_cy(cy);
 	// if(!debug1)
 	// {	
-	// 	printf("rot : %f %f %f\n",rot.x, rot.y, rot.z, debug1 = TRUE);
-	// 	printf("before : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
+	// 	ft_printf("rot : %f %f %f\n",rot.x, rot.y, rot.z, debug1 = TRUE);
+	// 	ft_printf("before : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
 	// }
 	
 	// //ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
@@ -163,7 +163,7 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	
 	// if(!debug2)
 	// {	
-	// 	printf("after : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
+	// 	ft_printf("after : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
 	// 	debug2 = TRUE;
 	// }
 	pos = ft_minus(ray.p1, cy.c);
@@ -174,7 +174,7 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	hit.hit = FALSE;
 	if (delta > 0)
 	{
-		//printf("before : %f %f %f\n",rot.x, rot.y, rot.z);
+		//ft_printf("before : %f %f %f\n",rot.x, rot.y, rot.z);
 		hit.sol = -b + sqrtf(delta) / (2.0 * a);
 		if (hit.sol > -b - sqrtf(delta) / (2.0 * a))
 			hit.sol = -b - sqrtf(delta) / (2.0 * a);
@@ -182,7 +182,7 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 			return (hit);
 		hit.sol /= 2;
 		hit.p = ft_get_point(ray, hit.sol);
-			//printf("%f %f %f\n",hit.p.x, hit.p.y, hit.p.z);
+			//ft_printf("%f %f %f\n",hit.p.x, hit.p.y, hit.p.z);
 		if ((hit.p.y > cy.c.y) && (hit.p.y < cy.c.y + cy.h))
 		{
 			hit.hit = TRUE;
@@ -192,7 +192,7 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 			hit.id = cy.id;
 			hit.ray = ray;
 			hit.color = cy.color;
-			//printf("%d %d %d\n",hit.color.r, hit.color.g, hit.color.b);
+			//ft_printf("%d %d %d\n",hit.color.r, hit.color.g, hit.color.b);
 		}
 	}
 	return (hit);

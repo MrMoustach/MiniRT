@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/01 01:52:26 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 04:46:29 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include "keys.h"
 # include <time.h>
 #include "debug.h"
+#include "./ext/srcs/ft_printf.h"
 
 int 	map_to_sphere(t_sphere *s, t_vector3 center, float radius,t_vector3 color);
 int 	map_to_vector3(t_vector3 *v, float x, float y, float z);
@@ -40,7 +41,7 @@ int		ft_reverse(t_vector3 *v);
 float	ft_mag(t_vector3 v);
 unsigned	int		ft_rgbtohex(t_rgb color);
 int		ft_multiply(t_vector3 *v, float n);
-float	ft_abs(float a);
+float	ft_fabs(float a);
 void 	put_pix(double x, double y, int color);
 t_sphere	sphere(t_vector3 center, float radius, t_rgb color);
 t_vector3	vector3(float x, float y, float z);
@@ -82,7 +83,9 @@ int     ft_string_is_int(char *s);
 t_rgb   ft_is_color_good(char **tab);
 t_vector3   ft_is_point_good(char **tab, int *err);
 t_vector3   ft_is_direction_good(char **tab, int *err);
-
+int     ft_string_is_good_intensity(char *s);
+int     ft_string_is_good_diameter(char *s);
+int ft_err(t_scene scene);
 
 void        *cnx;
 void        *win;

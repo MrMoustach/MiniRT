@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 20:43:56 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/23 02:48:49 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 03:15:44 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ float	ft_mag(t_vector3 v)
 	mag = (powf(v.x,2) + powf(v.y,2) + powf(v.z,2));
 	mag = sqrtf(mag);
 	if (mag < 0)
-		printf("%f",mag);
-	return (ft_abs(mag));
+		ft_printf("%f",mag);
+	return (ft_fabs(mag));
 }
 int		ft_reverse(t_vector3 *v)
 {
@@ -92,7 +92,7 @@ int		ft_multiply(t_vector3 *v, float n)
 	(*v).z *= n;
 	return (255);
 }
-float	ft_abs(float a)
+float	ft_fabs(float a)
 {
 	if (a > 0)
 		return (a);

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 01:30:28 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/01 03:53:25 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 03:29:29 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,30 @@ int     ft_string_is_float(char *s)
         }
         i++;
     }
+    return (1);
+}
+
+int     ft_string_is_good_intensity(char *s)
+{
+    float in;
+    
+    if (!ft_string_is_float(s))
+        return (0);
+    in = ft_parse_float(s);
+    if (in < 0.0 || in > 1.0)
+        return (0);
+    return (1);
+}
+
+int     ft_string_is_good_diameter(char *s)
+{
+    float d;
+    
+    if (!ft_string_is_float(s))
+        return (0);
+    d = ft_parse_float(s);
+    if (d < 0.0)
+        return (0);
     return (1);
 }
 
