@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 20:43:56 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 03:15:44 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/10 01:05:35 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ t_vector3	ft_normalize(t_vector3	v)
 	float	mag;
 
 	mag = ft_mag(v);
+	if (mag == 0)
+	{
+		v.x = 0;
+		v.y = 0;
+		v.z = 0;
+		return (v);
+	}
 	v.x = v.x / mag;
 	v.y = v.y / mag;
 	v.z = v.z / mag;

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 03:15:44 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/10 03:05:36 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ t_square	ft_find_sq_points(t_square sq, t_vector3 x)
 	t_vector3	u;
 	float		r;
 
-	//(void) x;
 	r = sqrtf(powf(sq.size, 2) / 2);
 	v = ft_cross(vector3(round(sq.n.x * -1), round(sq.n.y * -1), round(sq.n.z * -1)), sq.n);
 	u = ft_normalize(ft_cross(v, sq.n));
@@ -106,6 +105,7 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 {
 	t_hit		hit;
 	float		denom;
+	t_vector3	v;
 
 	hit.hit = FALSE;
 	hit.normal = vector3(0, 0, 0);
@@ -113,13 +113,13 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 	if (denom > 1e-6)
 	{	
 		t_cam cam1= ft_get_cam(scene, 0,vector3(0, 0, 0), vector3(0, 0, 0));
-		sq = ft_find_sq_points(sq, cam1.ray.p2);
+		sq = ft_find_sq_points(sq, vector3(0,1,0));
 		hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p3, sq.p2, sq.color));
-		if (!hit.hit)
+		if (hit.hit != TRUE)
 			hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p4, sq.p3, sq.color));
-		hit.normal = sq.n;
+		v = ft_minus(hit.p, sq.p1);
+		// hit.normal = sq.n;
 		// if (ft_dot(hit.normal, ray.p2) <= 1e-6)
-		// 	ft_printf("t\n");
 	}
 	return (hit);
 }
@@ -129,10 +129,10 @@ t_vector3	rotation_cy(t_cylinder cy)
 	t_vector3	tmp;
 	t_vector3	rot;
 
-	tmp = cy.n;
-	tmp.x = 0;
+	tmp = ft_normalize(cy.n);
+	tmp.x = 0.0;
 	rot.x = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
-	tmp = cy.n;
+	tmp = ft_normalize(cy.n);
 	tmp.z = 0;
 	rot.z = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
 	rot.y = 0;
@@ -148,25 +148,23 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	t_hit	hit;
 	t_vector3	pos;
 	t_vector3	rot;
-	static bool debug1 = FALSE;
-	static bool debug2 = FALSE;
-
-	// //rot = rotation_cy(cy);
-	// if(!debug1)
-	// {	
-	// 	ft_printf("rot : %f %f %f\n",rot.x, rot.y, rot.z, debug1 = TRUE);
-	// 	ft_printf("before : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
-	// }
+	t_vector3	offset;
+	static	int debug = 0;
+	rot = rotation_cy(cy);
 	
-	// //ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
-	// //ray.p2 = rotate_vector(ray.p2, ft_multi(rot, -1));
-	
-	// if(!debug2)
-	// {	
-	// 	ft_printf("after : %f %f %f\n",ray.p2.x, ray.p2.y, ray.p2.z);
-	// 	debug2 = TRUE;
-	// }
+	ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
+	ray.p2 = rotate_vector(ray.p2, ft_multi(rot, -1));
+	offset = rotate_vector(cy.n, ft_multi(rot, -1));
+	//cy.c.y -= cy.h/2 ;
+	cy.c = rotate_vector(cy.c, ft_multi(rot, -1));
+	cy.c = vector3(cy.c.x - (ft_fabs(offset.x) * cy.h/2), cy.c.y - (ft_fabs(offset.y) * cy.h/2), cy.c.z - (ft_fabs(offset.z) * cy.h/2));
+	if (debug == 0)
+	{
+		printf("%f %f %f\n",offset.x, offset.y, offset.z);
+		debug = 1;
+	}
 	pos = ft_minus(ray.p1, cy.c);
+	// pos = rotate_vector(pos, ft_multi(rot, -1));
 	a = (ray.p2.x * ray.p2.x) + (ray.p2.z * ray.p2.z);
 	b = 2 * ((pos.x * ray.p2.x) + (pos.z * ray.p2.z));
 	c = (pos.x * pos.x) + (pos.z * pos.z) - cy.r * cy.r;
@@ -179,15 +177,17 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 		if (hit.sol > -b - sqrtf(delta) / (2.0 * a))
 			hit.sol = -b - sqrtf(delta) / (2.0 * a);
 		if (hit.sol < 0)
+		{
 			return (hit);
+		}
 		hit.sol /= 2;
 		hit.p = ft_get_point(ray, hit.sol);
 			//ft_printf("%f %f %f\n",hit.p.x, hit.p.y, hit.p.z);
 		if ((hit.p.y > cy.c.y) && (hit.p.y < cy.c.y + cy.h))
 		{
 			hit.hit = TRUE;
-			hit.normal = ft_normalize(ft_minus(vector3(cy.c.x, cy.c.y + cy.h / 2 , cy.c.z), hit.p));
-			//hit.normal = rotate_vector(hit.normal, ft_multi(rot, 1 ));
+			hit.normal = ft_normalize(ft_minus(vector3(cy.c.x, hit.p.y , cy.c.z), hit.p));
+			//hit.normal = rotate_vector(hit.normal, ft_multi(rot, -1));
 			// hit.normal = ft_normalize(ft_minus(cy.c, hit.p));
 			hit.id = cy.id;
 			hit.ray = ray;

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 04:46:29 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/10 02:49:28 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ t_rgb		clamp_color(t_rgb v);
 t_rgb	rgb_multi(t_rgb rgb, float f);
 t_vector3 sphere_normal(t_vector3 c, t_vector3 pi);
 t_rgb	rgb(int x, int y, int z);
-int			plane_intersect(t_ray r, t_plane p, float *t);
 t_plane	plane(t_vector3 p, t_vector3 n, t_rgb c);
 float	ft_parse_float(char *s);
 t_scene	ft_parse(t_scene s, char *file);

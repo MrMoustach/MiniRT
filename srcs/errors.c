@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 03:29:39 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 05:55:43 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/03 05:57:25 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int ft_err(t_scene scene)
     if (scene.err_code == -9)
         ft_printf("That's a negative height ma dude, come on\n");
     if (scene.err_code == -10)
-        ft_printf("Are you this excited about this project you added more parameters?\n");
+        ft_printf("Are you this excited about this project you added more parameters to resolution?\n");
     if (scene.err_code == -11)
         ft_printf("You kinda declared the ambient 2 times, RTFM!\n");
     if (scene.err_code == -12)
