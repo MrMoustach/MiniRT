@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/10 03:05:36 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/12 02:55:46 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,11 @@ t_square	ft_find_sq_points(t_square sq, t_vector3 x)
 	float		r;
 
 	r = sqrtf(powf(sq.size, 2) / 2);
-	v = ft_cross(vector3(round(sq.n.x * -1), round(sq.n.y * -1), round(sq.n.z * -1)), sq.n);
-	u = ft_normalize(ft_cross(v, sq.n));
+	// FIXME: shiiit
+	// v = ft_cross(vector3(round(sq.n.x * -1), round(sq.n.y * -1), round(sq.n.z * -1)), x);
+	v = ft_cross(sq.n, x);
 	v = ft_normalize(v);
+	u = ft_normalize(ft_cross(v, sq.n));
 	sq.p1 = ft_plus(sq.p,ft_multi(v, r));
 	sq.p3 = ft_minus(sq.p,ft_multi(v, r));
 	sq.p2 = ft_plus(sq.p,ft_multi(u, r));
@@ -105,21 +107,27 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 {
 	t_hit		hit;
 	float		denom;
-	t_vector3	v;
 
 	hit.hit = FALSE;
 	hit.normal = vector3(0, 0, 0);
 	denom = ft_dot(sq.n, ray.p2);
+	if (denom <= 1e-6)
+	{
+		denom = ft_dot(ft_reverse(sq.n), ray.p2);
+		sq.n = ft_reverse(sq.n);
+	}
 	if (denom > 1e-6)
 	{	
-		t_cam cam1= ft_get_cam(scene, 0,vector3(0, 0, 0), vector3(0, 0, 0));
-		sq = ft_find_sq_points(sq, vector3(0,1,0));
-		hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p3, sq.p2, sq.color));
+		
+		sq = ft_find_sq_points(sq, vector3(1,1,1));
+		// FIXME: reversed
+		hit = ft_tr_intersect(ray, triangle(sq.p3, sq.p2, sq.p1, sq.color));
 		if (hit.hit != TRUE)
-			hit = ft_tr_intersect(ray, triangle(sq.p1, sq.p4, sq.p3, sq.color));
-		v = ft_minus(hit.p, sq.p1);
-		// hit.normal = sq.n;
-		// if (ft_dot(hit.normal, ray.p2) <= 1e-6)
+			hit = ft_tr_intersect(ray, triangle(sq.p4, sq.p3, sq.p1, sq.color));
+		hit.id = sq.id;
+		hit.normal = sq.n;
+		hit.p = ft_get_point(ray, hit.sol);
+		// printf("%f %f %f, %f\n", hit.normal.x, hit.normal.y, hit.normal.z, hit.sol);
 	}
 	return (hit);
 }
@@ -149,20 +157,14 @@ t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
 	t_vector3	pos;
 	t_vector3	rot;
 	t_vector3	offset;
-	static	int debug = 0;
+
 	rot = rotation_cy(cy);
-	
 	ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
 	ray.p2 = rotate_vector(ray.p2, ft_multi(rot, -1));
 	offset = rotate_vector(cy.n, ft_multi(rot, -1));
 	//cy.c.y -= cy.h/2 ;
 	cy.c = rotate_vector(cy.c, ft_multi(rot, -1));
 	cy.c = vector3(cy.c.x - (ft_fabs(offset.x) * cy.h/2), cy.c.y - (ft_fabs(offset.y) * cy.h/2), cy.c.z - (ft_fabs(offset.z) * cy.h/2));
-	if (debug == 0)
-	{
-		printf("%f %f %f\n",offset.x, offset.y, offset.z);
-		debug = 1;
-	}
 	pos = ft_minus(ray.p1, cy.c);
 	// pos = rotate_vector(pos, ft_multi(rot, -1));
 	a = (ray.p2.x * ray.p2.x) + (ray.p2.z * ray.p2.z);
@@ -234,7 +236,7 @@ t_hit	ft_tr_intersect(t_ray ray, t_triangle tr)
 	hit.normal = ft_normalize(ft_cross(edge1, edge2));
 	a = ft_dot(hit.normal, ray.p2);
 	if (a <= 1e-6)
-		ft_reverse(&(hit.normal));
+		hit.normal = ft_reverse(hit.normal);
 	hit.color = tr.color;
 	hit.ray = ray;
 	hit.id = tr.id;

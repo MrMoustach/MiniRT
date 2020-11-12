@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/05 20:43:56 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/10 01:05:35 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/11 09:45:20 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ float	ft_mag(t_vector3 v)
 		ft_printf("%f",mag);
 	return (ft_fabs(mag));
 }
-int		ft_reverse(t_vector3 *v)
+t_vector3		ft_reverse(t_vector3 v)
 {
-	(*v).x *= -1;
-	(*v).y *= -1;
-	(*v).z *= -1;
-	return (0);
+	v.x *= -1;
+	v.y *= -1;
+	v.z *= -1;
+	return (v);
 }
 unsigned	int		ft_rgbtohex(t_rgb color)
 {

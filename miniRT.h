@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/10 02:49:28 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/11 09:45:28 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		ft_ambient(t_ambient *am,float bright,float x, float y, float z);
 t_vector3	ft_get_point(t_ray ray, float sol);
 int		ft_light(t_light *l, t_vector3 pos, float r, float g, float b, float bright);
 t_vector3	ft_normalize(t_vector3	v);
-int		ft_reverse(t_vector3 *v);
+t_vector3		ft_reverse(t_vector3 v);
 float	ft_mag(t_vector3 v);
 unsigned	int		ft_rgbtohex(t_rgb color);
 int		ft_multiply(t_vector3 *v, float n);
