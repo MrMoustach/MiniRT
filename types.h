@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/31 01:21:20 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/12 12:29:42 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,15 @@ typedef struct s_hit
 	int			id;
 }				t_hit;
 
+typedef	struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_length;
+	int		endian;
+} t_img;
+
 typedef struct	s_scene
 {
 	t_config	config;
@@ -136,14 +145,7 @@ typedef struct	s_scene
 	int			err_code;
 	int			line;
 	int			save;
+	int			skybox;
 }				t_scene;
-typedef	struct s_img
-{
-	void	*img;
-	char	*addr;
-	int		bpp;
-	int		line_length;
-	int		endian;
-} t_img;
 
 #endif

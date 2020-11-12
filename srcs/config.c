@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 04:54:16 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/12 12:31:06 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ int	get_type(char *type)
 		return (7);
 	if (!ft_strncmp(type, "tr",2))
 		return (8);
-	return (9);
+	if (!ft_strncmp(type, "sk",2))
+		return (9);
+	return (10);
 }
 void	free_tab(char **tab)
 {
@@ -414,6 +416,8 @@ int		ft_line_parse(char *line,t_scene *scene)
 	else if (type == 8)
 		parse_triangle(tab, scene);
 	else if (type == 9)
+		scene->skybox = 1;
+	else if (type == 10)
 		scene->err_code = -48;
 	
 	return (scene->err_code);
@@ -433,6 +437,7 @@ void init_scene(t_scene *scene)
 	(*scene).config.set = 0;
 	(*scene).line = 0;
 	(*scene).am.set = 0;
+	(*scene).skybox= 0;
 }
 int		check_rt_file(char *file)
 {

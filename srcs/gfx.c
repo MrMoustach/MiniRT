@@ -13,10 +13,16 @@
 
 #include "../miniRT.h"
 
-void put_pix(double x, double y, int color)
+void put_pix(double x, double y, int color, int sk)
 {
     char    *dst;
+    char    *src;
     
     dst = img.addr + (int)round(y * img.line_length + x * (img.bpp / 8));
+    src = skybox.addr + (int)round(y * skybox.line_length + x * (skybox.bpp / 8));
     *(unsigned int*)dst = color;
+    if (color == 0x01ffffff && sk)
+    {
+        *(unsigned int*)dst = *(unsigned int*)src;
+    }
 }

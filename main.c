@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 04:47:05 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/12 12:27:34 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,9 @@ int main(int argc, char *argv[])
 	cnx = mlx_init();
 	win = mlx_new_window(cnx, scene.config.width, scene.config.height, "My miniRT");
 	img.img = mlx_new_image(cnx,scene.config.width, scene.config.height);
+	skybox.img = mlx_xpm_file_to_image(cnx,"./srcs/stars.xpm",&skybox.bpp,&skybox.bpp);
+	skybox.addr = mlx_get_data_addr(skybox.img, &skybox.bpp, &skybox.line_length, &skybox.endian);
+	mlx_put_image_to_window(cnx,win,skybox.img,0,0);
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_length, &img.endian);
 	mlx_key_hook(win,keys,&scene);
 	ft_render(scene, 0, vector3(0, 0, 0), vector3(0, 0, 0));

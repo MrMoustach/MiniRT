@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/11 08:28:52 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/12 12:32:33 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,19 @@ t_hit	ft_intersections(t_scene scene,t_ray r)
 	return (ret);
 }
 
-t_rgb	ft_shot_ray(t_scene scene, t_ray r)
+unsigned	int	ft_shot_ray(t_scene scene, t_ray r)
 {
 	t_hit		hit;
 	float		dot;
 	float		sol;
-	t_rgb		color;
+	unsigned	int		color;
 
 	hit = ft_intersections(scene, r);
 	
 	if (hit.hit == TRUE)
-		color = ft_calc_light(scene, hit);
+		color = ft_rgbtohex(ft_calc_light(scene, hit));
 	else
-		color = rgb(0, 0, 0);
+		color = 0x01ffffff * scene.skybox;
 	return (color);
 }
 
@@ -120,8 +120,8 @@ void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 			r.p2.z = camera.ray.p2.z;
 			r.p2 = ft_plus(r.p2,camera.ray.p2);
 			r.p2 = ft_normalize(r.p2);
-			pixel = ft_shot_ray(scene, r);
-			put_pix(i, j, ft_rgbtohex(pixel));
+			//pixel = ft_shot_ray(scene, r);
+			put_pix(i, j, ft_shot_ray(scene, r), scene.skybox);
 			i++;
 		}
 		j++;

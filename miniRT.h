@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 16:53:42 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/11 09:45:28 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/12 12:31:42 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ float	ft_mag(t_vector3 v);
 unsigned	int		ft_rgbtohex(t_rgb color);
 int		ft_multiply(t_vector3 *v, float n);
 float	ft_fabs(float a);
-void 	put_pix(double x, double y, int color);
+void 	put_pix(double x, double y, int color, int sk);
 t_sphere	sphere(t_vector3 center, float radius, t_rgb color);
 t_vector3	vector3(float x, float y, float z);
 t_light		light(t_vector3 pos, t_rgb color, float bright);
@@ -89,4 +89,5 @@ int ft_err(t_scene scene);
 void        *cnx;
 void        *win;
 t_img       img;
+t_img       skybox;
 #endif
