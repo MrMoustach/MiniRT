@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 17:21:57 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/10 00:25:00 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/12 03:51:26 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@ float	max(double n1, double n2)
 		return (n1);
 	else
 		return (n2);
-}
-int	ft_same(t_sphere sp1, t_sphere sp2)
-{
-	if (sp1.center.x == sp2.center.x && sp1.center.y == sp2.center.y && sp1.center.z == sp2.center.z && sp1.radius == sp2.radius)
-		return (1);
-	return (0);
 }
 t_rgb	ft_calc_light(t_scene scene, t_hit hit)
 {
@@ -57,9 +51,14 @@ t_rgb	ft_calc_light(t_scene scene, t_hit hit)
 		color = add_color(color, rgb_multi(l.color, l.bright));
 		head = (*head).next;
 	}
+	// color = add_color(add_color(add_color(rgb_multi(hit.color,scene.am.bright), 
+	// 		rgb_multi(scene.am.color,scene.am.bright)),add_color(rgb_multi(color, 
+	// 		(dot)),rgb_multi(hit.color, dot))), rgb_multi(add_color(hit.color, color), powf(dot,0.9))); 
 	color = add_color(add_color(rgb_multi(hit.color,scene.am.bright), 
 			rgb_multi(scene.am.color,scene.am.bright)),add_color(rgb_multi(color, 
 			(dot)),rgb_multi(hit.color, dot)));
+			//no spec ((ob.c * am.b)+(am.c*am.b))+((l.c*dot)+(ob.c*dot))
+			// spec (ob.c+am.c)*am.b+(l.c+ob.c)*dot + (ob.c+l.c)*(powf(dot,0.3*0.3))
 	return (color);
 }
 t_square	square(t_vector3 p, t_vector3 n, float size, t_rgb c)
