@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 03:29:39 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 05:57:25 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/22 02:00:09 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ int ft_err(t_scene scene)
         ft_printf("We coloring, Colors are great, with this simple paramter add color to you triangle ([0-255],[0-255],[0-255])\n");
     if (scene.err_code == -48)
         ft_printf("Ouf, I think you have the wrong number, i mean the object you gave isn't supported, call us later\n");
-    return (0);
+    close_win(0, &scene);
+    return (-1);
 }

@@ -6,18 +6,20 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/12 12:32:33 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/22 04:40:23 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../miniRT.h"
-t_cam   ft_get_cam(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
+
+t_cam			ft_get_cam(t_scene scene, int flag, t_vector3 mov,
+							t_vector3 rot)
 {
 	t_cam		ret;
 	t_list		*head;
 	int			n;
 	static	int	sc;
-	
+
 	if (flag)
 	{
 		sc++;
@@ -25,15 +27,17 @@ t_cam   ft_get_cam(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
 	}
 	head = scene.cams;
 	n = 0;
-	while(head && n++ < sc)
+	while (head && n++ < sc)
 		head = (*head).next;
-	(*(t_cam *)(*head).content).ray.p1 = ft_plus((*(t_cam *)(*head).content).ray.p1, mov);
-	(*(t_cam *)(*head).content).ray.p2 = ft_plus((*(t_cam *)(*head).content).ray.p2, rot);
+	(*(t_cam *)(*head).content).ray.p1 =
+					ft_plus((*(t_cam *)(*head).content).ray.p1, mov);
+	(*(t_cam *)(*head).content).ray.p2 =
+					ft_plus((*(t_cam *)(*head).content).ray.p2, rot);
 	ret = *(t_cam *)(*head).content;
 	return (ret);
 }
 
-t_hit	ft_intersections(t_scene scene,t_ray r)
+t_hit			ft_intersections(t_scene scene,t_ray r)
 {
 	t_list	*objs;
 	t_hit	hit;
@@ -80,13 +84,12 @@ t_hit	ft_intersections(t_scene scene,t_ray r)
 
 unsigned	int	ft_shot_ray(t_scene scene, t_ray r)
 {
-	t_hit		hit;
-	float		dot;
-	float		sol;
-	unsigned	int		color;
+	t_hit			hit;
+	float			dot;
+	float			ol;
+	unsigned	int	color;
 
 	hit = ft_intersections(scene, r);
-	
 	if (hit.hit == TRUE)
 		color = ft_rgbtohex(ft_calc_light(scene, hit));
 	else
@@ -94,36 +97,36 @@ unsigned	int	ft_shot_ray(t_scene scene, t_ray r)
 	return (color);
 }
 
-void    ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
+void			ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
 {
 	t_list  *head;
 	t_cam   camera;
 	int     i;
 	int     j;
-	t_rgb	pixel;
 	t_ray	r;
 	clock_t t;
 	float tt;
-	
+	//FIXME: tmp
 	j = 0;
 	t = clock();
-	camera = ft_get_cam(scene, flag,mov, rot);
+	camera = ft_get_cam(scene, flag, mov, rot);
 	while (j < scene.config.height)
 	{
 		i = 0;
 		while (i < scene.config.width)
 		{
 			r.p1 = camera.ray.p1;
-			r.p2.x = (2*(i + 0.5)/(float)scene.config.width  - 1)*tan(camera.fov/2.)*
-						scene.config.width/(float)scene.config.height;
-			r.p2.y = -(2*(j + 0.5)/(float)scene.config.height - 1)*tan(camera.fov/2.);
+			r.p2.x = (2 * (i + 0.5) / (float)scene.config.width  - 1) *
+				tan(camera.fov / 2.) * scene.config.width / (float)scene.config.height;
+			r.p2.y = -(2 * (j + 0.5) / (float)scene.config.height - 1) *
+					tan(camera.fov / 2.);
 			r.p2.z = camera.ray.p2.z;
 			r.p2 = ft_plus(r.p2,camera.ray.p2);
 			r.p2 = ft_normalize(r.p2);
-			//pixel = ft_shot_ray(scene, r);
 			put_pix(i, j, ft_shot_ray(scene, r), scene.skybox);
 			i++;
 		}
+		printf("%f%%\n",((float)(j) / (float)(scene.config.height)) * 100);
 		j++;
 	}
 	mlx_put_image_to_window(cnx,win,img.img,0,0);

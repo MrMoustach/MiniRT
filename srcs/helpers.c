@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 01:30:28 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 03:29:29 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/22 04:14:35 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ t_rgb   ft_is_color_good(char **tab)
     r = ft_atoi(tab[0]);
     g = ft_atoi(tab[1]);
     b = ft_atoi(tab[2]);
+    free_tab(tab);
     if (r < 0 || b < 0 || g < 0)
         return (rgb(-1, 0, 0));
     if (r > 255 || b > 255 || g > 255)
