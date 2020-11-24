@@ -6,13 +6,13 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 23:38:53 by iharchi           #+#    #+#             */
-/*   Updated: 2020/10/28 23:41:19 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/24 04:28:55 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../minirt.h"
 
-void			bit_shift(unsigned char *arr, int val)
+void				bit_shift(unsigned char *arr, int val)
 {
 	int		i;
 
@@ -24,7 +24,7 @@ void			bit_shift(unsigned char *arr, int val)
 	}
 }
 
-unsigned char	*bmp_header(int size)
+unsigned	char	*bmp_header(int size)
 {
 	unsigned char *header;
 
@@ -36,7 +36,7 @@ unsigned char	*bmp_header(int size)
 	return (header);
 }
 
-unsigned char	*bmp_info(t_config config)
+unsigned	char	*bmp_info(t_config config)
 {
 	unsigned char *info;
 
@@ -52,13 +52,13 @@ unsigned char	*bmp_info(t_config config)
 	return (info);
 }
 
-int						save_bmp(const char *name, t_config config, int *image)
+int					save_bmp(const char *name, t_config config, int *image)
 {
-	unsigned char	*color[3];
+	unsigned	char	*color[3];
 	unsigned	char	*header[2];
-	int				x;
-	int 				fd;
-	int				y;
+	int					x;
+	int					fd;
+	int					y;
 
 	header[0] = bmp_header(4 * config.width * config.height + 54);
 	header[1] = bmp_info(config);
@@ -67,8 +67,8 @@ int						save_bmp(const char *name, t_config config, int *image)
 	free(header[0]);
 	write(fd, header[1], 40);
 	free(header[1]);
-	y = config.height;
-	while (y > 0)
+	y = config.height + 1;
+	while (y-- > 0)
 	{
 		x = config.width * y - config.width;
 		while (x < config.width * y)
@@ -77,8 +77,6 @@ int						save_bmp(const char *name, t_config config, int *image)
 			write(fd, color, 3);
 			x++;
 		}
-		y--;
 	}
-	close(fd);
-	return (1);
+	return (close(fd));
 }

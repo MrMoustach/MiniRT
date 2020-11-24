@@ -6,19 +6,19 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/22 04:40:23 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/24 04:29:02 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../minirt.h"
 
 t_cam			ft_get_cam(t_scene scene, int flag, t_vector3 mov,
-							t_vector3 rot)
+t_vector3 rot)
 {
 	t_cam		ret;
 	t_list		*head;
 	int			n;
-	static	int	sc;
+	static int	sc;
 
 	if (flag)
 	{
@@ -30,14 +30,41 @@ t_cam			ft_get_cam(t_scene scene, int flag, t_vector3 mov,
 	while (head && n++ < sc)
 		head = (*head).next;
 	(*(t_cam *)(*head).content).ray.p1 =
-					ft_plus((*(t_cam *)(*head).content).ray.p1, mov);
+		ft_plus((*(t_cam *)(*head).content).ray.p1, mov);
 	(*(t_cam *)(*head).content).ray.p2 =
-					ft_plus((*(t_cam *)(*head).content).ray.p2, rot);
+		ft_plus((*(t_cam *)(*head).content).ray.p2, rot);
 	ret = *(t_cam *)(*head).content;
 	return (ret);
 }
 
-t_hit			ft_intersections(t_scene scene,t_ray r)
+t_hit			ft_intersections2(t_hit ret, t_list *objs, t_ray r,
+						t_scene scene)
+{
+	t_hit hit;
+
+	if ((*(t_object *)(*objs).content).type == 4)
+	{
+		hit = ft_sp_intersect(r, (*(t_object *)(*objs).content).sp);
+		if (hit.hit && hit.sol < ret.sol)
+			ret = hit;
+	}
+	if ((*(t_object *)(*objs).content).type == 5)
+	{
+		hit = ft_pl_intersect(r, (*(t_object *)(*objs).content).plane);
+		if (hit.hit && hit.sol < ret.sol)
+			ret = hit;
+	}
+	if ((*(t_object *)(*objs).content).type == 6)
+	{
+		hit = ft_sq_intersect(r, (*(t_object *)(*objs).content).square,
+							scene);
+		if (hit.hit && hit.sol < ret.sol)
+			ret = hit;
+	}
+	return (ret);
+}
+
+t_hit			ft_intersections(t_scene scene, t_ray r)
 {
 	t_list	*objs;
 	t_hit	hit;
@@ -47,24 +74,7 @@ t_hit			ft_intersections(t_scene scene,t_ray r)
 	ret.sol = 100000;
 	while (objs)
 	{
-		if ((*(t_object *)(*objs).content).type == 4)
-		{
-			hit = ft_sp_intersect(r, (*(t_object *)(*objs).content).sp);
-			if (hit.hit && hit.sol < ret.sol)
-				ret = hit;
-		}
-		if ((*(t_object *)(*objs).content).type == 5)
-		{
-			hit = ft_pl_intersect(r, (*(t_object *)(*objs).content).plane);
-			if (hit.hit && hit.sol < ret.sol)
-				ret = hit;
-		}
-		if ((*(t_object *)(*objs).content).type == 6)
-		{
-			hit = ft_sq_intersect(r, (*(t_object *)(*objs).content).square, scene);
-			if (hit.hit && hit.sol < ret.sol)
-				ret = hit;
-		}
+		ret = ft_intersections2(ret, objs, r, scene);
 		if ((*(t_object *)(*objs).content).type == 7)
 		{
 			hit = ft_cy_intersect(r, (*(t_object *)(*objs).content).cylinder);
@@ -82,12 +92,12 @@ t_hit			ft_intersections(t_scene scene,t_ray r)
 	return (ret);
 }
 
-unsigned	int	ft_shot_ray(t_scene scene, t_ray r)
+unsigned int	ft_shot_ray(t_scene scene, t_ray r)
 {
 	t_hit			hit;
 	float			dot;
 	float			ol;
-	unsigned	int	color;
+	unsigned int	color;
 
 	hit = ft_intersections(scene, r);
 	if (hit.hit == TRUE)
@@ -97,57 +107,26 @@ unsigned	int	ft_shot_ray(t_scene scene, t_ray r)
 	return (color);
 }
 
-void			ft_render(t_scene scene, int flag,t_vector3 mov, t_vector3 rot)
+void			ft_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
 {
-	t_list  *head;
-	t_cam   camera;
-	int     i;
-	int     j;
+	t_list	*head;
+	t_cam	camera;
+	int		i;
+	int		j;
 	t_ray	r;
-	clock_t t;
-	float tt;
-	//FIXME: tmp
+
 	j = 0;
-	t = clock();
 	camera = ft_get_cam(scene, flag, mov, rot);
 	while (j < scene.config.height)
 	{
 		i = 0;
 		while (i < scene.config.width)
 		{
-			r.p1 = camera.ray.p1;
-			r.p2.x = (2 * (i + 0.5) / (float)scene.config.width  - 1) *
-				tan(camera.fov / 2.) * scene.config.width / (float)scene.config.height;
-			r.p2.y = -(2 * (j + 0.5) / (float)scene.config.height - 1) *
-					tan(camera.fov / 2.);
-			r.p2.z = camera.ray.p2.z;
-			r.p2 = ft_plus(r.p2,camera.ray.p2);
-			r.p2 = ft_normalize(r.p2);
+			r = make_ray(scene, camera, i, j);
 			put_pix(i, j, ft_shot_ray(scene, r), scene.skybox);
 			i++;
 		}
-		printf("%f%%\n",((float)(j) / (float)(scene.config.height)) * 100);
 		j++;
 	}
-	mlx_put_image_to_window(cnx,win,img.img,0,0);
-	char *firstLine[] = {
-						"Camera id :", 
-						ft_itoa(camera.id), 
-						"Pos : (", 
-						ft_itoa(camera.ray.p1.x), 
-						ft_itoa(camera.ray.p1.y), 
-						ft_itoa(camera.ray.p1.z), 
-						")",
-						"Rot : (",
-						ft_itoa(camera.ray.p2.x), 
-						ft_itoa(camera.ray.p2.y), 
-						ft_itoa(camera.ray.p2.z), 
-						")",
-						"FOV :",
-						ft_itoa(camera.fov/(M_PI/180))
-						};
-	mlx_string_put(cnx, win, 50, 50, 0xffffff, concatenate(14, firstLine, " "));
-	t = clock() - t;
-	tt = ((double)t)/CLOCKS_PER_SEC;
-	printf("It took %f s to render this frame\n", tt);
+	mlx_put_image_to_window(g_cnx, g_win, g_img.img, 0, 0);
 }

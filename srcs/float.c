@@ -6,11 +6,11 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 20:05:02 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/03 01:25:01 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/24 04:29:17 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../minirt.h"
 
 int		ft_lookfor(char *s, int c)
 {

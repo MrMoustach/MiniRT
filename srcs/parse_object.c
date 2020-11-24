@@ -6,11 +6,11 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 01:34:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/22 04:14:22 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/24 04:30:07 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../minirt.h"
 
 t_ambient	parse_ambient(char **tab, t_scene *scene)
 {

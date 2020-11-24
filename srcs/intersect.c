@@ -6,26 +6,37 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/12 02:55:46 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/24 04:29:40 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../minirt.h"
 
-t_hit	ft_sp_intersect(t_ray ray, t_sphere sphere)
+t_hit		ft_sp_int_help(t_hit hit, t_sphere sphere, t_ray ray, float delta)
+{
+	hit.sol /= 2;
+	hit.p = ft_get_point(ray, hit.sol);
+	hit.normal = ft_normalize(ft_minus(sphere.center, hit.p));
+	hit.ray = ray;
+	hit.color = sphere.color;
+	hit.hit = (delta > 0);
+	hit.id = sphere.id;
+	return (hit);
+}
+
+t_hit		ft_sp_intersect(t_ray ray, t_sphere sphere)
 {
 	t_vector3	vec;
 	float		a;
 	float		b;
-	float		c;
 	float		delta;
 	t_hit		hit;
 
 	vec = ft_minus(ray.p1, sphere.center);
 	a = ft_dot(ray.p2, ray.p2);
 	b = 2.0 * ft_dot(vec, ray.p2);
-	c = ft_dot(vec, vec) - sphere.radius * sphere.radius;
-	delta = b * b - (4 * a * c);
+	delta = b * b - (4 * a * (ft_dot(vec, vec) -
+			sphere.radius * sphere.radius));
 	hit.hit = FALSE;
 	if (delta > 0 && ((-b + sqrtf(delta)) || (-b - sqrtf(delta))))
 	{
@@ -33,23 +44,13 @@ t_hit	ft_sp_intersect(t_ray ray, t_sphere sphere)
 		if (hit.sol > -b + sqrtf(delta) / (2.0 * a))
 			hit.sol = -b + sqrtf(delta) / (2.0 * a);
 		if (hit.sol < 0)
-		{
-			hit.hit = FALSE;
 			return (hit);
-		}
-		hit.sol /= 2;
-		hit.p = ft_get_point(ray, hit.sol);
-		hit.normal = ft_normalize(ft_minus(sphere.center,hit.p));
-		hit.ray = ray;
-		hit.color = sphere.color;
-		hit.hit = (delta > 0);
-		hit.id = sphere.id;
+		hit = ft_sp_int_help(hit, sphere, ray, delta);
 	}
-
 	return (hit);
 }
 
-t_hit	ft_pl_intersect(t_ray ray, t_plane pl)
+t_hit		ft_pl_intersect(t_ray ray, t_plane pl)
 {
 	float		denom;
 	t_vector3	tmp;
@@ -71,19 +72,6 @@ t_hit	ft_pl_intersect(t_ray ray, t_plane pl)
 	return (hit);
 }
 
-/*
-
-v = cross(cam.p2, n) 
-u = cross(v,n)
-v = norm(v)
-u = norm(u)
-r = sqrt(pow(d)/2)
-p1 = c + r*v
-p2 = c - r*v
-p3 = c + r*u
-p4 = c - r*u
-*/
-
 t_square	ft_find_sq_points(t_square sq, t_vector3 x)
 {
 	t_vector3	v;
@@ -91,19 +79,17 @@ t_square	ft_find_sq_points(t_square sq, t_vector3 x)
 	float		r;
 
 	r = sqrtf(powf(sq.size, 2) / 2);
-	// FIXME: shiiit
-	// v = ft_cross(vector3(round(sq.n.x * -1), round(sq.n.y * -1), round(sq.n.z * -1)), x);
 	v = ft_cross(sq.n, x);
 	v = ft_normalize(v);
 	u = ft_normalize(ft_cross(v, sq.n));
-	sq.p1 = ft_plus(sq.p,ft_multi(v, r));
-	sq.p3 = ft_minus(sq.p,ft_multi(v, r));
-	sq.p2 = ft_plus(sq.p,ft_multi(u, r));
-	sq.p4 = ft_minus(sq.p,ft_multi(u, r));
+	sq.p1 = ft_plus(sq.p, ft_multi(v, r));
+	sq.p3 = ft_minus(sq.p, ft_multi(v, r));
+	sq.p2 = ft_plus(sq.p, ft_multi(u, r));
+	sq.p4 = ft_minus(sq.p, ft_multi(u, r));
 	return (sq);
 }
 
-t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
+t_hit		ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 {
 	t_hit		hit;
 	float		denom;
@@ -117,129 +103,14 @@ t_hit	ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
 		sq.n = ft_reverse(sq.n);
 	}
 	if (denom > 1e-6)
-	{	
-		
-		sq = ft_find_sq_points(sq, vector3(1,1,1));
-		// FIXME: reversed
+	{
+		sq = ft_find_sq_points(sq, vector3(1, 1, 1));
 		hit = ft_tr_intersect(ray, triangle(sq.p3, sq.p2, sq.p1, sq.color));
 		if (hit.hit != TRUE)
 			hit = ft_tr_intersect(ray, triangle(sq.p4, sq.p3, sq.p1, sq.color));
 		hit.id = sq.id;
 		hit.normal = sq.n;
 		hit.p = ft_get_point(ray, hit.sol);
-		// printf("%f %f %f, %f\n", hit.normal.x, hit.normal.y, hit.normal.z, hit.sol);
 	}
-	return (hit);
-}
-
-t_vector3	rotation_cy(t_cylinder cy)
-{
-	t_vector3	tmp;
-	t_vector3	rot;
-
-	tmp = ft_normalize(cy.n);
-	tmp.x = 0.0;
-	rot.x = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
-	tmp = ft_normalize(cy.n);
-	tmp.z = 0;
-	rot.z = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
-	rot.y = 0;
-	return (rot);
-}
-
-t_hit ft_cy_intersect(t_ray ray, t_cylinder cy)
-{
-	float	a;
-	float	b;
-	float	c;
-	float	delta;
-	t_hit	hit;
-	t_vector3	pos;
-	t_vector3	rot;
-	t_vector3	offset;
-
-	rot = rotation_cy(cy);
-	ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
-	ray.p2 = rotate_vector(ray.p2, ft_multi(rot, -1));
-	offset = rotate_vector(cy.n, ft_multi(rot, -1));
-	//cy.c.y -= cy.h/2 ;
-	cy.c = rotate_vector(cy.c, ft_multi(rot, -1));
-	cy.c = vector3(cy.c.x - (ft_fabs(offset.x) * cy.h/2), cy.c.y - (ft_fabs(offset.y) * cy.h/2), cy.c.z - (ft_fabs(offset.z) * cy.h/2));
-	pos = ft_minus(ray.p1, cy.c);
-	// pos = rotate_vector(pos, ft_multi(rot, -1));
-	a = (ray.p2.x * ray.p2.x) + (ray.p2.z * ray.p2.z);
-	b = 2 * ((pos.x * ray.p2.x) + (pos.z * ray.p2.z));
-	c = (pos.x * pos.x) + (pos.z * pos.z) - cy.r * cy.r;
-	delta = b * b - 4 * a * c;
-	hit.hit = FALSE;
-	if (delta > 0)
-	{
-		//ft_printf("before : %f %f %f\n",rot.x, rot.y, rot.z);
-		hit.sol = -b + sqrtf(delta) / (2.0 * a);
-		if (hit.sol > -b - sqrtf(delta) / (2.0 * a))
-			hit.sol = -b - sqrtf(delta) / (2.0 * a);
-		if (hit.sol < 0)
-		{
-			return (hit);
-		}
-		hit.sol /= 2;
-		hit.p = ft_get_point(ray, hit.sol);
-			//ft_printf("%f %f %f\n",hit.p.x, hit.p.y, hit.p.z);
-		if ((hit.p.y > cy.c.y) && (hit.p.y < cy.c.y + cy.h))
-		{
-			hit.hit = TRUE;
-			hit.normal = ft_normalize(ft_minus(vector3(cy.c.x, hit.p.y , cy.c.z), hit.p));
-			//hit.normal = rotate_vector(hit.normal, ft_multi(rot, -1));
-			// hit.normal = ft_normalize(ft_minus(cy.c, hit.p));
-			hit.id = cy.id;
-			hit.ray = ray;
-			hit.color = cy.color;
-			//ft_printf("%d %d %d\n",hit.color.r, hit.color.g, hit.color.b);
-		}
-	}
-	return (hit);
-}
-
-
-
-t_hit	ft_tr_intersect(t_ray ray, t_triangle tr)
-{
-	t_vector3	edge1;
-	t_vector3	edge2;
-	t_hit		hit;
-	float		a;
-	float		f;
-	float		v;
-	float		u;
-	t_vector3	s;
-	t_vector3	q;
-
-	edge1 = ft_minus(tr.p2, tr.p1);
-	edge2 = ft_minus(tr.p3, tr.p1);
-	hit.normal = ft_cross(ray.p2, edge2);
-	hit.hit = FALSE;
-	a = ft_dot(edge1, hit.normal);
-	if (a < 0.0001 && a > -0.0001)
-		return (hit);
-	f = 1.0/a;
-	s = ft_minus(ray.p1, tr.p1);
-	u = f * (ft_dot(s, hit.normal));
-	if (u < 0 || u > 1)
-		return (hit);
-	q = ft_cross(s, edge1);
-	v = f * ft_dot(ray.p2, q);
-	if (v < 0 || u + v > 1)
-		return (hit);
-	hit.sol = f * ft_dot(edge2, q);
-	if (hit.sol > 0.001)
-		hit.hit = TRUE;
-	hit.normal = ft_normalize(ft_cross(edge1, edge2));
-	a = ft_dot(hit.normal, ray.p2);
-	if (a <= 1e-6)
-		hit.normal = ft_reverse(hit.normal);
-	hit.color = tr.color;
-	hit.ray = ray;
-	hit.id = tr.id;
-	hit.p = ft_get_point(ray, hit.sol);
 	return (hit);
 }

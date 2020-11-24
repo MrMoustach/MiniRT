@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   keys.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/24 04:00:22 by iharchi           #+#    #+#             */
+/*   Updated: 2020/11/24 04:01:01 by iharchi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef KEYS_H
 # define KEYS_H
 # if defined(__MACH__)
@@ -13,8 +25,8 @@
 #  define KEY_4 86
 #  define KEY_6 88
 #  define KEY_2 84
-#  define KEY_plus 69
-#  define KEY_minus 78
+#  define KEY_PLUS 69
+#  define KEY_MINUS 78
 # elif defined(__linux__)
 #  define KEY_ESC 65307
 #  define KEY_C 99
@@ -28,7 +40,7 @@
 #  define KEY_4 65430
 #  define KEY_6 65432
 #  define KEY_2 65433
-#  define KEY_plus 65433
-#  define KEY_minus 65433
+#  define KEY_PLUS 65433
+#  define KEY_MINUS 65433
 # endif
 #endif

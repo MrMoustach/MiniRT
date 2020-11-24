@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/12 12:29:42 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/24 04:05:01 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define TYPES_H
 # define TRUE 1
 # define FALSE 0
-typedef	int 	bool;
+
 typedef struct	s_config
 {
 	int			width;
@@ -94,7 +94,7 @@ typedef struct	s_cylinder
 	float		h;
 	int			id;
 }				t_cylinder;
-typedef struct s_triangle
+typedef struct	s_triangle
 {
 	t_vector3	p1;
 	t_vector3	p2;
@@ -112,25 +112,25 @@ typedef struct	s_object
 	t_cylinder	cylinder;
 	t_triangle	triangle;
 }				t_object;
-typedef struct s_hit
+typedef struct	s_hit
 {
 	t_vector3	normal;
 	t_ray		ray;
-	bool		hit;
+	int			hit;
 	float		sol;
 	t_rgb		color;
 	t_vector3	p;
 	int			id;
 }				t_hit;
 
-typedef	struct s_img
+typedef	struct	s_img
 {
 	void	*img;
 	char	*addr;
 	int		bpp;
 	int		line_length;
 	int		endian;
-} t_img;
+}				t_img;
 
 typedef struct	s_scene
 {

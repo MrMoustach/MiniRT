@@ -6,11 +6,11 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/22 01:47:28 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/24 04:28:59 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../miniRT.h"
+#include "../minirt.h"
 
 char	*format_line(char *line)
 {
