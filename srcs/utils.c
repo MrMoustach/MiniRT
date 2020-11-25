@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 01:10:41 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:30:18 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 01:08:42 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ t_config	ft_check_res(t_config config)
 {
 	if (config.width > 2560)
 		config.width = 2560;
-	if (config.height > 1440)
+	if (config.height > 1320)
 		config.height = 1440;
 	return (config);
 }

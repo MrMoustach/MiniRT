@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:29:02 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 02:16:42 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_hit			ft_intersections2(t_hit ret, t_list *objs, t_ray r,
 {
 	t_hit hit;
 
+	(void)scene;
 	if ((*(t_object *)(*objs).content).type == 4)
 	{
 		hit = ft_sp_intersect(r, (*(t_object *)(*objs).content).sp);
@@ -56,8 +57,7 @@ t_hit			ft_intersections2(t_hit ret, t_list *objs, t_ray r,
 	}
 	if ((*(t_object *)(*objs).content).type == 6)
 	{
-		hit = ft_sq_intersect(r, (*(t_object *)(*objs).content).square,
-							scene);
+		hit = ft_sq_intersect(r, (*(t_object *)(*objs).content).square);
 		if (hit.hit && hit.sol < ret.sol)
 			ret = hit;
 	}
@@ -95,8 +95,6 @@ t_hit			ft_intersections(t_scene scene, t_ray r)
 unsigned int	ft_shot_ray(t_scene scene, t_ray r)
 {
 	t_hit			hit;
-	float			dot;
-	float			ol;
 	unsigned int	color;
 
 	hit = ft_intersections(scene, r);
@@ -109,7 +107,6 @@ unsigned int	ft_shot_ray(t_scene scene, t_ray r)
 
 void			ft_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
 {
-	t_list	*head;
 	t_cam	camera;
 	int		i;
 	int		j;

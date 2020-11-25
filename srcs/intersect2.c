@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 03:55:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:29:45 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 02:17:15 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ t_cylinder cy)
 t_hit		ft_cy_intersect(t_ray ray, t_cylinder cy)
 {
 	t_vector3	solve;
-	t_hit		hit;
 	t_vector3	pos;
 	t_vector3	rot;
 	t_vector3	offset;

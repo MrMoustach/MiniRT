@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 01:34:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:30:07 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 02:18:33 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_ambient	parse_ambient(char **tab, t_scene *scene)
 	if (tab[3] != '\0')
 		scene->err_code = -13;
 	if (scene->err_code < 0)
-		return (am);
+		return (scene->am);
 	if (!ft_string_is_good_intensity(tab[1]))
 		scene->err_code = -14;
 	intensity = ft_parse_float(tab[1]);

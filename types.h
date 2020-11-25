@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:05:01 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 00:41:21 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define TYPES_H
 # define TRUE 1
 # define FALSE 0
+# define SK_PATH "./srcs/stars.xpm"
+# define SAVE_PATH "img.bmp"
+# define TITLE "My miniRT"
 
 typedef struct	s_config
 {

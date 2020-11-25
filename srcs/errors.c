@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 03:29:39 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:29:09 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 00:07:29 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,18 @@ char	*g_errs[] = {"You serious bro?. File is not an RT \
 	"Joj : This is the second point, it needs to be (x,y,z)\n",
 	"Tlata : Finally, the third point should be (x,y,z) too, i mean you \
 	managed to fix the first 2 dude what's up ?\n",
-	"We coloring, Colors are great, with this simple paramter add color to you \
-	triangle ([0-255],[0-255],[0-255])\n",
+	"We coloring, Colors are great, with this simple paramter add color to \
+	your triangle ([0-255],[0-255],[0-255])\n",
 	"Ouf, I think you have the wrong number, i mean the object you gave isn't \
 supported, call us later\n"};
 
 int		ft_err(t_scene scene)
 {
-	ft_printf("Error\n");
-	ft_printf("line %d : ", scene.line);
-	ft_printf("line %d : ", abs(scene.err_code));
-	ft_printf(g_errs[abs(scene.err_code) - 1]);
+	ft_putstr_fd("Error\n", 1);
+	ft_putstr_fd("line ", 1);
+	ft_putnbr_fd(scene.line, 1);
+	ft_putstr_fd(" : ", 1);
+	ft_putstr_fd(g_errs[abs(scene.err_code) - 1], 1);
 	close_win(0, &scene);
 	return (-1);
 }

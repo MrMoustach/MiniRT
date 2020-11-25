@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 23:38:53 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:28:55 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 02:10:19 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,24 @@ unsigned	char	*bmp_info(t_config config)
 	return (info);
 }
 
+char			*make_name(t_config config, int *image)
+{
+	char			*t;
+
+	t = (char *)malloc(10);
+	t[0] = 'a' + image[1];
+	t[1] = 'a' + config.height%25;
+	t[2] = 'a' + config.width%25;
+	t[3] = 'a' + ((int) &config)%25;
+	t[4] = 'a' + ((int) image)%25;
+	t[5] = '.';
+	t[6] = 'b';
+	t[7] = 'm';
+	t[8] = 'p';
+	t[9] = '\0';
+	return (t);
+}
+
 int					save_bmp(const char *name, t_config config, int *image)
 {
 	unsigned	char	*color[3];
@@ -62,7 +80,9 @@ int					save_bmp(const char *name, t_config config, int *image)
 
 	header[0] = bmp_header(4 * config.width * config.height + 54);
 	header[1] = bmp_info(config);
-	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 777);
+	name = (const char *)make_name(config, image);
+	fd = open(name, O_CREAT | O_WRONLY, 777);
+	free((void *)name);
 	write(fd, header[0], 14);
 	free(header[0]);
 	write(fd, header[1], 40);

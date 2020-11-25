@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:29:40 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 02:15:16 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ t_square	ft_find_sq_points(t_square sq, t_vector3 x)
 	return (sq);
 }
 
-t_hit		ft_sq_intersect(t_ray ray, t_square sq, t_scene scene)
+t_hit		ft_sq_intersect(t_ray ray, t_square sq)
 {
 	t_hit		hit;
 	float		denom;

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 01:48:37 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:30:11 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 01:20:58 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int		ft_line_parse(char *line, t_scene *scene)
 	char	**tab;
 	int		type;
 
-	if (*line == '\0')
-		return (scene->err_code = -2);
 	tab = ft_split(line, ' ');
-	type = get_type(tab[0]);
+	type = -1;
+	if (*line != '\0')
+		type = get_type(tab[0]);
 	if (type == -1)
 		return (1);
 	if (type == 0)

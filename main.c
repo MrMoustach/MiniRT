@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:27:54 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 02:12:00 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ int		close_win(int key, void *param)
 {
 	t_scene scene;
 
-	scene = *(t_scene *)param;
-	ft_lstclear(&(scene.objects), free);
+	scene = *((t_scene *)param);
+	if (scene.line != 0 && key > 0)
+		ft_lstclear(&(scene.objects), free);
 	(void)key;
 	exit(EXIT_SUCCESS);
 	return (1);
@@ -67,26 +68,27 @@ int		main(int argc, char *argv[])
 {
 	t_scene scene;
 
+	scene.err_code = 0;
 	scene = argument_handler(scene, argv, argc);
 	if (scene.err_code < 0)
 		return (ft_err(scene));
 	g_cnx = mlx_init();
 	g_win = mlx_new_window(g_cnx, scene.config.width,
-						scene.config.height, "My miniRT");
+						scene.config.height, TITLE);
 	g_img.img = mlx_new_image(g_cnx, scene.config.width, scene.config.height);
-	g_skybox.img = mlx_xpm_file_to_image(g_cnx, "./srcs/stars.xpm",
+	g_skybox.img = mlx_xpm_file_to_image(g_cnx, SK_PATH,
 									&g_skybox.bpp, &g_skybox.bpp);
 	g_skybox.addr = mlx_get_data_addr(g_skybox.img,
 					&g_skybox.bpp, &g_skybox.line_length, &g_skybox.endian);
 	mlx_put_image_to_window(g_cnx, g_win, g_skybox.img, 0, 0);
 	g_img.addr = mlx_get_data_addr(g_img.img,
 								&g_img.bpp, &g_img.line_length, &g_img.endian);
+	ft_render(scene, 0, vector3(0, 0, 0), vector3(0, 0, 0));
 	mlx_key_hook(g_win, keys, &scene);
 	mlx_hook(g_win, 17, 0, close_win, &scene);
-	ft_render(scene, 0, vector3(0, 0, 0), vector3(0, 0, 0));
 	if (scene.save == 0)
 		mlx_loop(g_cnx);
 	else
-		save_bmp("hey.bmp", scene.config, (int *)g_img.addr);
+		save_bmp(SAVE_PATH, scene.config, (int *)g_img.addr);
 	return (0);
 }
