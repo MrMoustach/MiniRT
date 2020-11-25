@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 02:12:53 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:29:20 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 04:57:25 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_vector3	ft_is_direction_good(char **tab, int *err)
 		return (v);
 	if (v.x == 0 && v.y == 0 && v.z == 0)
 		return (vector3(*err = -1, 0, 0));
-	return (v);
+	return (ft_normalize(v));
 }
 
 t_rgb		ft_is_color_good(char **tab)

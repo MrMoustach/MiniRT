@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 03:29:39 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 00:07:29 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 03:43:07 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,12 @@ char	*g_errs[] = {"You serious bro?. File is not an RT \
 	"We coloring, Colors are great, with this simple paramter add color to \
 	your triangle ([0-255],[0-255],[0-255])\n",
 	"Ouf, I think you have the wrong number, i mean the object you gave isn't \
-supported, call us later\n"};
+	supported, call us later\n",
+	"Okay, so you know how you have eyes to see? so you basically need a \
+	camera to see what's going on here",
+	"Let's see.., you didn't add an ambient light? not cool bro",
+	"Ma dude how do u want this window to show if you dont have a window? add \
+some resolution to the file"};
 
 int		ft_err(t_scene scene)
 {

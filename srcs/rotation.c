@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 01:53:18 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:38:39 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 04:15:19 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,16 @@ t_vector3	rotate_vector(t_vector3 v, t_vector3 rot)
 	v = rotate_x(v, rot.x);
 	v = rotate_z(v, rot.z);
 	return (v);
+}
+
+void		bit_shift(unsigned char *arr, int val)
+{
+	int		i;
+
+	i = 0;
+	while (i < 4)
+	{
+		arr[i] = (unsigned char)(val >> (8 * i));
+		i++;
+	}
 }

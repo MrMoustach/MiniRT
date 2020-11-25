@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:28:59 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 04:32:28 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	*format_line(char *line)
 
 int		get_type(char *type)
 {
+	if (type == NULL)
+		return (-1);
 	if (*type == '#')
 		return (-1);
 	if (!ft_strncmp(type, "R", 2))
@@ -83,10 +85,11 @@ void	init_scene(t_scene *scene)
 	(*scene).skybox = 0;
 }
 
-int		check_rt_file(char *file)
+int		check_rt_file(char *file, t_scene *scene)
 {
 	char *file_at_point;
 
+	init_scene(scene);
 	file_at_point = ft_strrchr(file, '.') + 1;
 	if (file_at_point == (char *)1)
 		return (-1);
@@ -101,14 +104,11 @@ t_scene	ft_parse(t_scene scene, char *file)
 	int		fd;
 	int		n;
 
-	if ((scene.err_code = check_rt_file(file)) < 0)
-		return (scene);
-	if ((fd = open(file, O_RDONLY)) < 0)
-	{
+	scene.err_code = check_rt_file(file, &scene);
+	if (scene.err_code >= 0 && (fd = open(file, O_RDONLY)) < 0)
 		scene.err_code = -5;
+	if (scene.err_code < 0)
 		return (scene);
-	}
-	init_scene(&scene);
 	while ((n = get_next_line(fd, &line)))
 	{
 		line = format_line(line);
@@ -118,5 +118,11 @@ t_scene	ft_parse(t_scene scene, char *file)
 	}
 	line = format_line(line);
 	ft_line_parse(line, &scene);
+	if (scene.cams == NULL)
+		scene.err_code = -49;
+	if (scene.am.set == 0)
+		scene.err_code = -50;
+	if (scene.config.set == 0)
+		scene.err_code = -51;
 	return (scene);
 }

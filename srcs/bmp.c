@@ -6,23 +6,11 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 23:38:53 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 02:10:19 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/25 04:14:02 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
-
-void				bit_shift(unsigned char *arr, int val)
-{
-	int		i;
-
-	i = 0;
-	while (i < 4)
-	{
-		arr[i] = (unsigned char)(val >> (8 * i));
-		i++;
-	}
-}
 
 unsigned	char	*bmp_header(int size)
 {
@@ -52,22 +40,29 @@ unsigned	char	*bmp_info(t_config config)
 	return (info);
 }
 
-char			*make_name(t_config config, int *image)
+char				*make_name(t_config config, int *image)
 {
 	char			*t;
 
 	t = (char *)malloc(10);
-	t[0] = 'a' + image[1];
-	t[1] = 'a' + config.height%25;
-	t[2] = 'a' + config.width%25;
-	t[3] = 'a' + ((int) &config)%25;
-	t[4] = 'a' + ((int) image)%25;
+	t[0] = 'a' + image[1] % 24;
+	t[1] = 'a' + config.height % 24;
+	t[2] = 'a' + config.width % 24;
+	t[3] = 'a' + ((int)&config) % 24;
+	t[4] = 'a' + ((int)image) % 24;
 	t[5] = '.';
 	t[6] = 'b';
 	t[7] = 'm';
 	t[8] = 'p';
 	t[9] = '\0';
 	return (t);
+}
+
+void				free_stuff(unsigned char **header, const char *name)
+{
+	free(header[0]);
+	free(header[1]);
+	free((void *)name);
 }
 
 int					save_bmp(const char *name, t_config config, int *image)
@@ -82,11 +77,9 @@ int					save_bmp(const char *name, t_config config, int *image)
 	header[1] = bmp_info(config);
 	name = (const char *)make_name(config, image);
 	fd = open(name, O_CREAT | O_WRONLY, 777);
-	free((void *)name);
 	write(fd, header[0], 14);
-	free(header[0]);
 	write(fd, header[1], 40);
-	free(header[1]);
+	free_stuff(header, name);
 	y = config.height + 1;
 	while (y-- > 0)
 	{
