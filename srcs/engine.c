@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 03:40:39 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/26 02:13:15 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,14 @@ t_hit			ft_intersections2(t_hit ret, t_list *objs, t_ray r,
 	return (ret);
 }
 
-t_hit			ft_intersections(t_scene scene, t_ray r)
+t_hit			ft_intersections(t_scene scene, t_ray r, float max)
 {
 	t_list	*objs;
 	t_hit	hit;
 	t_hit	ret;
 
 	objs = scene.objects;
-	ret.sol = 100000;
+	ret.sol = max;
 	while (objs)
 	{
 		ret = ft_intersections2(ret, objs, r, scene);
@@ -97,7 +97,7 @@ unsigned int	ft_shot_ray(t_scene scene, t_ray r)
 	t_hit			hit;
 	unsigned int	color;
 
-	hit = ft_intersections(scene, r);
+	hit = ft_intersections(scene, r, 100000);
 	if (hit.hit == TRUE)
 		color = ft_rgbtohex(ft_calc_light(scene, hit));
 	else

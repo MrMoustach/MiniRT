@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 03:55:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 02:17:15 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/26 02:37:41 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_hit		ft_cy_intersect(t_ray ray, t_cylinder cy)
 	t_vector3	rot;
 	t_vector3	offset;
 
+	cy.n.y = ft_fabs(cy.n.y);
 	rot = get_rotation_cy(cy);
 	ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
 	ray.p2 = rotate_vector(ray.p2, ft_multi(rot, -1));

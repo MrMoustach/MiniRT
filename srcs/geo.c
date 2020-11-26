@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 17:21:57 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:29:29 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/26 03:00:23 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_rgb		ft_calc_light(t_scene scene, t_hit hit)
 	while (head)
 	{
 		hp = ft_normalize(ft_minus(hit.p, (*(t_light *)(*head).content).pos));
-		soll = ft_intersections(scene, ray(hit.p, ft_multi(hp, -1)));
+		soll = ft_intersections(scene, ray(hit.p, ft_multi(hp, -1)), 100000);
 		dot += !(soll.hit == TRUE && soll.id != hit.id && soll.sol < hit.sol) *
 						(*(t_light *)(*head).content).bright *
 						(max(ft_dot(hp, hit.normal), 0));
