@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 17:21:57 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/26 03:00:23 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/27 02:26:49 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,12 @@ t_rgb		ft_calc_light(t_scene scene, t_hit hit)
 						(*(t_light *)(*head).content).bright *
 						(max(ft_dot(hp, hit.normal), 0));
 		color = add_color(color, rgb_multi((*(t_light *)(*head).content).color,
-		(*(t_light *)(*head).content).bright));
+		(*(t_light *)(*head).content).bright * (max(ft_dot(hp, hit.normal), 0))));
 		head = (*head).next;
 	}
 	color = add_color(add_color(rgb_multi(hit.color, scene.am.bright),
 			rgb_multi(scene.am.color, scene.am.bright)),
-			add_color(rgb_multi(color,
-			(dot)), rgb_multi(hit.color, dot)));
+			add_color(color, rgb_multi(hit.color, dot)));
 	return (color);
 }
 

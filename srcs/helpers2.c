@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 02:12:53 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 04:57:25 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/27 04:09:24 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,20 @@ t_rgb		ft_is_color_good(char **tab)
 	return (rgb(r, g, b));
 }
 
-t_ray		make_ray(t_scene scene, t_cam camera, int i, int j)
+t_ray		make_ray(t_scene scene, t_cam camera, float u, float v)
 {
-	t_ray r;
+	t_ray		r;
+	t_vector3	up;
+	t_vector3	right;
+	float		w;
+	float		h;
 
-	r.p1 = camera.ray.p1;
-	r.p2.x = (2 * (i + 0.5) / (float)scene.config.width - 1) *
-			tan(camera.fov / 2.) * scene.config.width /
-			(float)scene.config.height;
-	r.p2.y = -(2 * (j + 0.5) / (float)scene.config.height - 1) *
-			tan(camera.fov / 2.);
-	r.p2.z = camera.ray.p2.z;
-	r.p2 = ft_plus(r.p2, camera.ray.p2);
-	r.p2 = ft_normalize(r.p2);
+	right = ft_normalize(ft_cross(camera.ray.p2, vector3(0, 1, 0)));
+	up = ft_normalize(ft_cross(right, camera.ray.p2));
+	h = tan(camera.fov / 2);
+	w = h * (float)scene.config.width / (float)scene.config.height;
+	r = camera.ray;
+	r.p2 = ft_normalize(ft_plus(ft_plus(r.p2, ft_multi(right, u * w)),
+			ft_multi(up, v * h)));
 	return (r);
 }

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/26 02:13:15 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/11/27 01:36:57 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,18 +112,20 @@ void			ft_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
 	int		j;
 	t_ray	r;
 
-	j = 0;
+	i = 0;
 	camera = ft_get_cam(scene, flag, mov, rot);
-	while (j < scene.config.height)
+	while (i < scene.config.height)
 	{
-		i = 0;
-		while (i < scene.config.width)
+		j = 0;
+		while (j < scene.config.width)
 		{
-			r = make_ray(scene, camera, i, j);
+			r = make_ray(scene, camera, (float)(-2 * i) /
+			(float)(scene.config.width) + 1, (float)(-2 * j) /
+			(float)(scene.config.height) + 1);
 			put_pix(i, j, ft_shot_ray(scene, r), scene.skybox);
-			i++;
+			j++;
 		}
-		j++;
+		i++;
 	}
 	mlx_put_image_to_window(g_cnx, g_win, g_img.img, 0, 0);
 }
