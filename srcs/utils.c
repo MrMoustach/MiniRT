@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 01:10:41 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/01 01:52:12 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/02 00:34:02 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,27 +18,9 @@ void		ft_keys_to_cam(int key, t_scene *sc)
 
 	scene = *sc;
 	if (key == KEY_C)
-		ft_re_render(scene, 1, vector3(0, 0, 0), vector3(0, 0, 0));
-	if (key == KEY_UP)
-		ft_re_render(scene, 0, vector3(0, 0, 1), vector3(0, 0, 0));
-	if (key == KEY_DOWN)
-		ft_re_render(scene, 0, vector3(0, 0, -1), vector3(0, 0, 0));
-	if (key == KEY_LEFT)
-		ft_re_render(scene, 0, vector3(-1, 0, 0), vector3(0, 0, 0));
-	if (key == KEY_RIGHT)
-		ft_re_render(scene, 0, vector3(1, 0, 0), vector3(0, 0, 0));
-	if (key == KEY_U)
-		ft_re_render(scene, 0, vector3(0, 1, 0), vector3(0, 0, 0));
-	if (key == KEY_D)
-		ft_re_render(scene, 0, vector3(0, -1, 0), vector3(0, 0, 0));
-	if (key == KEY_2)
-		ft_re_render(scene, 0, vector3(0, 0, 0), vector3(0, -0.1, 0));
-	if (key == KEY_4)
-		ft_re_render(scene, 0, vector3(0, 0, 0), vector3(-0.1, 0, 0));
-	if (key == KEY_6)
-		ft_re_render(scene, 0, vector3(0, 0, 0), vector3(0.1, 0, 0));
-	if (key == KEY_8)
-		ft_re_render(scene, 0, vector3(0, 0, 0), vector3(0, 0.1, 0));
+		ft_re_render(scene, 1, 0);
+	else
+		ft_re_render(scene, 0, key);
 }
 
 void		free_tab(char **tab)

@@ -6,19 +6,19 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 02:12:00 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/02 00:09:03 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_re_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
+void	ft_re_render(t_scene scene, int flag, int key)
 {
 	mlx_destroy_image(g_cnx, g_img.img);
 	g_img.img = mlx_new_image(g_cnx, scene.config.width, scene.config.height);
 	g_img.addr = mlx_get_data_addr(g_img.img,
 				&g_img.bpp, &g_img.line_length, &g_img.endian);
-	ft_render(scene, flag, mov, rot);
+	ft_render(scene, flag, key);
 }
 
 int		keys(int key, void *param)
@@ -83,7 +83,7 @@ int		main(int argc, char *argv[])
 	mlx_put_image_to_window(g_cnx, g_win, g_skybox.img, 0, 0);
 	g_img.addr = mlx_get_data_addr(g_img.img,
 								&g_img.bpp, &g_img.line_length, &g_img.endian);
-	ft_render(scene, 0, vector3(0, 0, 0), vector3(0, 0, 0));
+	ft_render(scene, 0, 0);
 	mlx_key_hook(g_win, keys, &scene);
 	mlx_hook(g_win, 17, 0, close_win, &scene);
 	if (scene.save == 0)

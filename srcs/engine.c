@@ -6,14 +6,13 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/01 04:35:41 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/02 00:35:09 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 
-t_cam			ft_get_cam(t_scene scene, int flag, t_vector3 mov,
-t_vector3 rot)
+t_cam			ft_get_cam(t_scene scene, int flag, int key)
 {
 	t_cam		ret;
 	t_list		*head;
@@ -29,16 +28,15 @@ t_vector3 rot)
 	n = 0;
 	while (head && n++ < sc)
 		head = (*head).next;
-	(*(t_cam *)(*head).content).ray.p1 =
-		ft_plus((*(t_cam *)(*head).content).ray.p1, mov);
-	(*(t_cam *)(*head).content).ray.p2 =
-		ft_plus((*(t_cam *)(*head).content).ray.p2, rot);
 	ret = *(t_cam *)(*head).content;
+	ret.ray.p1 = move_cam(ret, key);
+	ret.ray.p2 = rotate_cam(ret, key);
 	ret.right = ft_normalize(ft_cross(ret.ray.p2,
 				ft_normalize(vector3(0, 1, -ret.ray.p2.y))));
 	ret.up = ft_normalize(ft_cross(ret.right, ret.ray.p2));
 	ret.h = tan(ret.fov / 2);
 	ret.w = ret.h * (float)scene.config.width / (float)scene.config.height;
+	*(t_cam *)(*head).content = ret;
 	return (ret);
 }
 
@@ -110,7 +108,7 @@ unsigned int	ft_shot_ray(t_scene scene, t_ray r)
 	return (color);
 }
 
-void			ft_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
+void			ft_render(t_scene scene, int flag, int key)
 {
 	t_cam	camera;
 	int		i;
@@ -118,7 +116,7 @@ void			ft_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
 	t_ray	r;
 
 	i = 0;
-	camera = ft_get_cam(scene, flag, mov, rot);
+	camera = ft_get_cam(scene, flag, key);
 	while (i < scene.config.height)
 	{
 		j = 0;
