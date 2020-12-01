@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 00:41:21 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 02:03:01 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,11 @@ typedef struct	s_cam
 {
 	t_ray		ray;
 	float		fov;
+	t_vector3	up;
+	t_vector3	right;
 	int			id;
+	float		h;
+	float		w;
 }				t_cam;
 typedef struct	s_sphere
 {

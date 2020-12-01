@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 13:52:47 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 02:15:16 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 03:25:49 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 t_hit		ft_sp_int_help(t_hit hit, t_sphere sphere, t_ray ray, float delta)
 {
-	hit.sol /= 2;
 	hit.p = ft_get_point(ray, hit.sol);
 	hit.normal = ft_normalize(ft_minus(sphere.center, hit.p));
 	hit.ray = ray;
@@ -40,9 +39,9 @@ t_hit		ft_sp_intersect(t_ray ray, t_sphere sphere)
 	hit.hit = FALSE;
 	if (delta > 0 && ((-b + sqrtf(delta)) || (-b - sqrtf(delta))))
 	{
-		hit.sol = -b - sqrtf(delta) / (2.0 * a);
-		if (hit.sol > -b + sqrtf(delta) / (2.0 * a))
-			hit.sol = -b + sqrtf(delta) / (2.0 * a);
+		hit.sol = (-b - sqrtf(delta)) / (2.0 * a);
+		if (hit.sol > (-b + sqrtf(delta)) / (2.0 * a))
+			hit.sol = (-b + sqrtf(delta)) / (2.0 * a);
 		if (hit.sol < 0)
 			return (hit);
 		hit = ft_sp_int_help(hit, sphere, ray, delta);

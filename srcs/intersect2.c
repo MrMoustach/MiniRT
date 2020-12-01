@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 03:55:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/26 02:37:41 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 03:37:58 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,57 +26,71 @@ t_vector3	get_rotation_cy(t_cylinder cy)
 	rot.y = 0;
 	return (rot);
 }
-
-t_hit		ft_cy_int_help(t_vector3 solve, t_vector3 pos, t_ray ray,
-t_cylinder cy)
+t_hit		ft_disc_intersect(t_ray ray, t_plane pl, float r)
 {
-	t_hit hit;
+	float		denom;
+	t_vector3	tmp;
+	t_hit		hit;
 
 	hit.hit = FALSE;
-	if (pos.x > 0)
+	denom = ft_dot(pl.n, ray.p2);
+	if (denom > 1e-6)
 	{
-		hit.sol = -solve.y + sqrtf(pos.x) / (2.0 * solve.x);
-		if (hit.sol > -solve.y - sqrtf(pos.x) / (2.0 * solve.x))
-			hit.sol = -solve.y - sqrtf(pos.x) / (2.0 * solve.x);
-		if (hit.sol < 0)
-			return (hit);
-		hit.sol /= 2;
+		tmp = ft_minus(pl.p, ray.p1);
+		hit.sol = ft_dot(tmp, pl.n) / denom;
+		hit.hit = (hit.sol >= 0);
+		hit.color = pl.color;
+		hit.id = pl.id;
+		hit.normal = pl.n;
 		hit.p = ft_get_point(ray, hit.sol);
-		if ((hit.p.y > cy.c.y) && (hit.p.y < cy.c.y + cy.h))
-		{
-			hit.hit = TRUE;
-			hit.normal = ft_normalize(
-					ft_minus(vector3(cy.c.x, hit.p.y, cy.c.z), hit.p));
-			hit.id = cy.id;
-			hit.ray = ray;
-			hit.color = cy.color;
-		}
+		hit.ray = ray;
+		if (sqrtf(ft_dot(ft_minus(hit.p, pl.p), ft_minus(hit.p, pl.p))) > r)
+			hit.hit = FALSE;
 	}
 	return (hit);
 }
-
 t_hit		ft_cy_intersect(t_ray ray, t_cylinder cy)
 {
+	t_vector3	x;
+	float		delta;
 	t_vector3	solve;
-	t_vector3	pos;
-	t_vector3	rot;
-	t_vector3	offset;
+	t_hit		hit;
+	float		m;
 
-	cy.n.y = ft_fabs(cy.n.y);
-	rot = get_rotation_cy(cy);
-	ray.p1 = rotate_vector(ray.p1, ft_multi(rot, -1));
-	ray.p2 = rotate_vector(ray.p2, ft_multi(rot, -1));
-	offset = rotate_vector(cy.n, ft_multi(rot, -1));
-	cy.c = rotate_vector(cy.c, ft_multi(rot, -1));
-	cy.c = vector3(cy.c.x - (ft_fabs(offset.x) * cy.h / 2),
-		cy.c.y - (ft_fabs(offset.y) * cy.h / 2), cy.c.z -
-			(ft_fabs(offset.z) * cy.h / 2));
-	pos = ft_minus(ray.p1, cy.c);
-	solve.x = (ray.p2.x * ray.p2.x) + (ray.p2.z * ray.p2.z);
-	solve.y = 2 * ((pos.x * ray.p2.x) + (pos.z * ray.p2.z));
-	solve.z = (pos.x * pos.x) + (pos.z * pos.z) - cy.r * cy.r;
-	pos.x = solve.y * solve.y - 4 * solve.x * solve.z;
-	return (ft_cy_int_help(solve, pos, ray, cy));
+	hit.hit = FALSE;
+	x = ft_minus(ray.p1, cy.c);
+	solve.x = ft_dot(ray.p2, ray.p2) - powf(ft_dot(ray.p2, cy.n), 2);
+	solve.y = (2 * ft_dot(ray.p2, x)) - (2 * (ft_dot(ray.p2, cy.n) *
+				ft_dot(x, cy.n)));
+	solve.z = ft_dot(x, x) - powf(ft_dot(x, cy.n), 2) - cy.r * cy.r;
+	delta = solve.y * solve.y - (4 * solve.x * solve.z);
+	if (delta > 0)
+	{
+		hit.sol = (-solve.y + sqrtf(delta)) / (2.0 * solve.x);
+		if (hit.sol >= (-solve.y - sqrtf(delta)) / (2.0 * solve.x))
+			hit.sol = (-solve.y - sqrtf(delta)) / (2.0 * solve.x);
+		if (hit.sol < 0)
+			return (hit);
+		hit.p = ft_get_point(ray, hit.sol);
+		m = ft_dot(ray.p2, cy.n) * hit.sol + ft_dot(x, cy.n);
+		if (m >= 0 && m <= cy.h)
+		{
+			hit.hit = TRUE;
+			hit.normal = ft_normalize(ft_minus(ft_minus(cy.c, hit.p),
+							ft_multi(cy.n, -m)));
+			hit.id = cy.id;
+			hit.ray = ray;
+			hit.color = cy.color;
+		}else{
+			hit = ft_disc_intersect(ray, plane(cy.c, cy.n, cy.color), cy.r);
+			if (hit.hit == FALSE)
+			{
+				hit = ft_disc_intersect(ray, plane(ft_plus(cy.c, ft_multi(cy.n, cy.h)), ft_multi(cy.n, -1), cy.color), cy.r);
+			}
+			hit.id = cy.id;
+		}
+	}
+	return (hit);
 }
 
 t_hit		ft_tr_int_h(t_hit hit, t_ray ray, t_triangle tr, t_vector3 n)

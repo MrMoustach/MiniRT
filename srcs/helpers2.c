@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 02:12:53 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/27 04:09:24 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 02:04:57 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,10 @@ t_rgb		ft_is_color_good(char **tab)
 t_ray		make_ray(t_scene scene, t_cam camera, float u, float v)
 {
 	t_ray		r;
-	t_vector3	up;
-	t_vector3	right;
-	float		w;
-	float		h;
-
-	right = ft_normalize(ft_cross(camera.ray.p2, vector3(0, 1, 0)));
-	up = ft_normalize(ft_cross(right, camera.ray.p2));
-	h = tan(camera.fov / 2);
-	w = h * (float)scene.config.width / (float)scene.config.height;
+	
+	(void)scene;
 	r = camera.ray;
-	r.p2 = ft_normalize(ft_plus(ft_plus(r.p2, ft_multi(right, u * w)),
-			ft_multi(up, v * h)));
+	r.p2 = ft_normalize(ft_plus(ft_plus(r.p2, ft_multi(camera.right, u * camera.w)),
+			ft_multi(camera.up, v * camera.h)));
 	return (r);
 }

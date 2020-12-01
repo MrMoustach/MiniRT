@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/27 01:36:57 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 02:04:20 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ t_vector3 rot)
 	(*(t_cam *)(*head).content).ray.p2 =
 		ft_plus((*(t_cam *)(*head).content).ray.p2, rot);
 	ret = *(t_cam *)(*head).content;
+	ret.right = ft_normalize(ft_cross(ret.ray.p2, ft_normalize(vector3(0, 1, ret.ray.p2.y))));
+	ret.up = ft_normalize(ft_cross(ret.right, ret.ray.p2));
+	ret.h = tan(ret.fov / 2);
+	ret.w = ret.h * (float)scene.config.width / (float)scene.config.height;
 	return (ret);
 }
 
@@ -119,10 +123,10 @@ void			ft_render(t_scene scene, int flag, t_vector3 mov, t_vector3 rot)
 		j = 0;
 		while (j < scene.config.width)
 		{
-			r = make_ray(scene, camera, (float)(-2 * i) /
-			(float)(scene.config.width) + 1, (float)(-2 * j) /
+			r = make_ray(scene, camera, (float)(-2 * j) /
+			(float)(scene.config.width) + 1, (float)(-2 * i) /
 			(float)(scene.config.height) + 1);
-			put_pix(i, j, ft_shot_ray(scene, r), scene.skybox);
+			put_pix(j, i, ft_shot_ray(scene, r), scene.skybox);
 			j++;
 		}
 		i++;
