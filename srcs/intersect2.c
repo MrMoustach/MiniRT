@@ -6,26 +6,12 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 03:55:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/01 03:37:58 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 03:45:48 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 
-t_vector3	get_rotation_cy(t_cylinder cy)
-{
-	t_vector3	tmp;
-	t_vector3	rot;
-
-	tmp = ft_normalize(cy.n);
-	tmp.x = 0.0;
-	rot.x = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
-	tmp = ft_normalize(cy.n);
-	tmp.z = 0;
-	rot.z = acos(ft_dot(vector3(0, 1, 0), ft_normalize(tmp)));
-	rot.y = 0;
-	return (rot);
-}
 t_hit		ft_disc_intersect(t_ray ray, t_plane pl, float r)
 {
 	float		denom;
@@ -49,6 +35,7 @@ t_hit		ft_disc_intersect(t_ray ray, t_plane pl, float r)
 	}
 	return (hit);
 }
+
 t_hit		ft_cy_intersect(t_ray ray, t_cylinder cy)
 {
 	t_vector3	x;
@@ -81,12 +68,12 @@ t_hit		ft_cy_intersect(t_ray ray, t_cylinder cy)
 			hit.id = cy.id;
 			hit.ray = ray;
 			hit.color = cy.color;
-		}else{
+		}
+		else
+		{
 			hit = ft_disc_intersect(ray, plane(cy.c, cy.n, cy.color), cy.r);
 			if (hit.hit == FALSE)
-			{
 				hit = ft_disc_intersect(ray, plane(ft_plus(cy.c, ft_multi(cy.n, cy.h)), ft_multi(cy.n, -1), cy.color), cy.r);
-			}
 			hit.id = cy.id;
 		}
 	}
