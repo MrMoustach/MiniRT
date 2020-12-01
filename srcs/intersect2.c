@@ -6,33 +6,46 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 03:55:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/01 03:45:48 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 04:27:42 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minirt.h"
 
-t_hit		ft_disc_intersect(t_ray ray, t_plane pl, float r)
+t_hit		ft_disc_intersect(t_ray ray, t_cylinder cy)
 {
-	float		denom;
-	t_vector3	tmp;
-	t_hit		hit;
+	t_plane	pl;
+	t_hit	hit;
 
-	hit.hit = FALSE;
-	denom = ft_dot(pl.n, ray.p2);
-	if (denom > 1e-6)
+	pl = plane(cy.c, cy.n, cy.color);
+	hit = ft_pl_intersect(ray, pl);
+	if (hit.hit == FALSE)
+		pl = plane(ft_plus(cy.c,
+			ft_multi(cy.n, cy.h)), ft_multi(cy.n, -1), cy.color);
+	hit = ft_pl_intersect(ray, pl);
+	if (sqrtf(ft_dot(ft_minus(hit.p, pl.p), ft_minus(hit.p, pl.p))) > cy.r)
+		hit.hit = FALSE;
+	hit.id = cy.id;
+	return (hit);
+}
+
+t_hit		ft_cy_inte_h(t_hit hit, t_cylinder cy, t_ray ray, t_vector3 x)
+{
+	float	m;
+
+	hit.p = ft_get_point(ray, hit.sol);
+	m = ft_dot(ray.p2, cy.n) * hit.sol + ft_dot(x, cy.n);
+	if (m >= 0 && m <= cy.h)
 	{
-		tmp = ft_minus(pl.p, ray.p1);
-		hit.sol = ft_dot(tmp, pl.n) / denom;
-		hit.hit = (hit.sol >= 0);
-		hit.color = pl.color;
-		hit.id = pl.id;
-		hit.normal = pl.n;
-		hit.p = ft_get_point(ray, hit.sol);
+		hit.hit = TRUE;
+		hit.normal = ft_normalize(ft_minus(ft_minus(cy.c, hit.p),
+						ft_multi(cy.n, -m)));
+		hit.id = cy.id;
 		hit.ray = ray;
-		if (sqrtf(ft_dot(ft_minus(hit.p, pl.p), ft_minus(hit.p, pl.p))) > r)
-			hit.hit = FALSE;
+		hit.color = cy.color;
 	}
+	else
+		hit = ft_disc_intersect(ray, cy);
 	return (hit);
 }
 
@@ -42,7 +55,6 @@ t_hit		ft_cy_intersect(t_ray ray, t_cylinder cy)
 	float		delta;
 	t_vector3	solve;
 	t_hit		hit;
-	float		m;
 
 	hit.hit = FALSE;
 	x = ft_minus(ray.p1, cy.c);
@@ -51,32 +63,16 @@ t_hit		ft_cy_intersect(t_ray ray, t_cylinder cy)
 				ft_dot(x, cy.n)));
 	solve.z = ft_dot(x, x) - powf(ft_dot(x, cy.n), 2) - cy.r * cy.r;
 	delta = solve.y * solve.y - (4 * solve.x * solve.z);
-	if (delta > 0)
+	hit.sol = (-solve.y + sqrtf(delta)) / (2.0 * solve.x);
+	if (hit.sol >= (-solve.y - sqrtf(delta)) / (2.0 * solve.x))
+		hit.sol = (-solve.y - sqrtf(delta)) / (2.0 * solve.x);
+	if (hit.sol < 0)
 	{
-		hit.sol = (-solve.y + sqrtf(delta)) / (2.0 * solve.x);
-		if (hit.sol >= (-solve.y - sqrtf(delta)) / (2.0 * solve.x))
-			hit.sol = (-solve.y - sqrtf(delta)) / (2.0 * solve.x);
-		if (hit.sol < 0)
-			return (hit);
-		hit.p = ft_get_point(ray, hit.sol);
-		m = ft_dot(ray.p2, cy.n) * hit.sol + ft_dot(x, cy.n);
-		if (m >= 0 && m <= cy.h)
-		{
-			hit.hit = TRUE;
-			hit.normal = ft_normalize(ft_minus(ft_minus(cy.c, hit.p),
-							ft_multi(cy.n, -m)));
-			hit.id = cy.id;
-			hit.ray = ray;
-			hit.color = cy.color;
-		}
-		else
-		{
-			hit = ft_disc_intersect(ray, plane(cy.c, cy.n, cy.color), cy.r);
-			if (hit.hit == FALSE)
-				hit = ft_disc_intersect(ray, plane(ft_plus(cy.c, ft_multi(cy.n, cy.h)), ft_multi(cy.n, -1), cy.color), cy.r);
-			hit.id = cy.id;
-		}
+		hit = ft_disc_intersect(ray, cy);
+		return (hit);
 	}
+	if (delta >= 0)
+		hit = ft_cy_inte_h(hit, cy, ray, x);
 	return (hit);
 }
 

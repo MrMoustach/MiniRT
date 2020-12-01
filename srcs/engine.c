@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/01 03:45:17 by iharchi          ###   ########.fr       */
+/*   Updated: 2020/12/01 04:35:41 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_vector3 rot)
 		ft_plus((*(t_cam *)(*head).content).ray.p2, rot);
 	ret = *(t_cam *)(*head).content;
 	ret.right = ft_normalize(ft_cross(ret.ray.p2,
-				ft_normalize(vector3(0, 1, ret.ray.p2.y))));
+				ft_normalize(vector3(0, 1, -ret.ray.p2.y))));
 	ret.up = ft_normalize(ft_cross(ret.right, ret.ray.p2));
 	ret.h = tan(ret.fov / 2);
 	ret.w = ret.h * (float)scene.config.width / (float)scene.config.height;
