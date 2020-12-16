@@ -54,3 +54,7 @@ Here is Wolf.rt :
 Here is scene.rt with all the objects:
 
 ![alt text](https://github.com/MrMoustach/MiniRT/blob/main/images/scene.bmp "scene.rt")
+
+Collisions:
+
+![alt text](https://github.com/MrMoustach/MiniRT/blob/main/images/collision.bmp "Collisions.rt")
