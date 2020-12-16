@@ -1,8 +1,7 @@
 # What is MiniRT
-```
+
 A mini RayTracer made using c and a 42 mini graphics library _MiniLibX_.
 
-```
 # How to install
 Only for testing, if you are doing this project for school too, or simply intrested in creating a RayTracer, i encourage you to write you own code instead of copying it.
 
@@ -10,20 +9,20 @@ if you haven't already, you have to install MinilibX (MLX) in order to use this 
 [MinilibX for linux](https://github.com/42Paris/minilibx-linux)
 [MinilibX for mac (latest i could find)](https://github.com/gcamerli/minilibx)
 ## MAC 
-    Clone this repo :
+Clone this repo :
 ```
     git clone --recurse-submodules https://github.com/MrMoustach/MiniRT.git
 ```
-    Then :
+Then :
 ```
     Make
 ```
 ## LINUX
-    Also clone : 
+Also clone : 
 ```
     git clone --recurse-submodules https://github.com/MrMoustach/MiniRT.git
 ```
-    Then :
+Then :
 ```
     Make linux
 ```
