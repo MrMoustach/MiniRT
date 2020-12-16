@@ -6,7 +6,7 @@
 #    By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/04 20:39:01 by iharchi           #+#    #+#              #
-#    Updated: 2020/12/02 02:03:22 by iharchi          ###   ########.fr        #
+#    Updated: 2020/12/16 01:41:46 by iharchi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SRC = 	srcs/*.c
 MLX = -I /usr/local/include
 LIBFT = libft/
 FLAG =  -L /usr/local/lib -lmlx -framework OpenGl -framework AppKit -D BUFFER_SIZE=32 -Wall -Werror -Wextra
+LINUX_FLAG = -L /usr/local/lib -lmlx -lX11 -lXext -D BUFFER_SIZE=32 -lm
 all: $(NAME)
 $(NAME) : 
 			@sh srcs/artwork.sh
@@ -35,5 +36,7 @@ fclean: clean
 	@echo "\033[0;32mEverything is cleaned"
 
 re : fclean all
-			
+
+linux :
+			@gcc  -g  main.c $(SRC) $(LIBFT)libft.a $(MLX) $(LINUX_FLAG) $(GNL) -o $(NAME)	
 .PHONY: all clean fclean re
