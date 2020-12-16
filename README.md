@@ -49,8 +49,8 @@ To save an image :
 # Some images 
 Here is Wolf.rt :
 
-![alt text](https://github.com/MrMoustach/MiniRT/images/wolf.bmp "Wolf.rt")
+![alt text](https://github.com/MrMoustach/MiniRT/blob/main/images/wolf.bmp "Wolf.rt")
 
 Here is scene.rt with all the objects:
 
-![alt text](https://github.com/MrMoustach/MiniRT/images/scene.bmp "scene.rt")
+![alt text](https://github.com/MrMoustach/MiniRT/blob/main/images/scene.bmp "scene.rt")
