@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/22 14:42:49 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/01 02:03:01 by iharchi          ###   ########.fr       */
+/*   Updated: 2021/01/26 12:18:55 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ typedef struct	s_scene
 	int			line;
 	int			save;
 	int			skybox;
+	int			ascii;
 }				t_scene;
 
 #endif

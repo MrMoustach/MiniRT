@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:57:29 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/02 00:35:09 by iharchi          ###   ########.fr       */
+/*   Updated: 2021/01/26 12:32:43 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void			ft_render(t_scene scene, int flag, int key)
 	int		i;
 	int		j;
 	t_ray	r;
-
+	
 	i = 0;
 	camera = ft_get_cam(scene, flag, key);
 	while (i < scene.config.height)
@@ -125,9 +125,19 @@ void			ft_render(t_scene scene, int flag, int key)
 			r = make_ray(scene, camera, (float)(-2 * j) /
 			(float)(scene.config.width) + 1, (float)(-2 * i) /
 			(float)(scene.config.height) + 1);
-			put_pix(j, i, ft_shot_ray(scene, r), scene.skybox);
+			unsigned int col = ft_shot_ray(scene, r);
+			put_pix(j, i, col, scene.skybox);
 			j++;
+			if (!scene.ascii)
+				printf("\rProgress : %f%%", ((float)(i * scene.config.height + j) / (float)(scene.config.width * scene.config.height)) * 100);
+			else
+			{
+				int new_col = (((col - 0x0) * (8 - 0)) / (0xffffff - 0x0)) + 0x0;
+				printf("\033[0;%dm  \033[0m", 40 + new_col);
+			}
 		}
+		if (scene.ascii)
+			printf("\n");
 		i++;
 	}
 	mlx_put_image_to_window(g_cnx, g_win, g_img.img, 0, 0);

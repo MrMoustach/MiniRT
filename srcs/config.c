@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/03 22:02:43 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/25 04:32:28 by iharchi          ###   ########.fr       */
+/*   Updated: 2021/01/26 12:21:50 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,9 @@ int		get_type(char *type)
 		return (8);
 	if (!ft_strncmp(type, "sk", 2))
 		return (9);
-	return (10);
+	if (!ft_strncmp(type, "as", 2))
+		return (10);
+	return (11);
 }
 
 void	init_scene(t_scene *scene)
@@ -83,6 +85,7 @@ void	init_scene(t_scene *scene)
 	(*scene).line = 0;
 	(*scene).am.set = 0;
 	(*scene).skybox = 0;
+	(*scene).ascii = 0;
 }
 
 int		check_rt_file(char *file, t_scene *scene)

@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/01 15:50:13 by iharchi           #+#    #+#             */
-/*   Updated: 2020/12/02 00:09:03 by iharchi          ###   ########.fr       */
+/*   Updated: 2021/01/26 12:21:36 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ t_scene	argument_handler(t_scene scene, char **argv, int argc)
 int		main(int argc, char *argv[])
 {
 	t_scene scene;
-
+	clock_t begin, end;
+	double  t;
+	
+	begin = clock();
 	scene.err_code = 0;
 	scene = argument_handler(scene, argv, argc);
 	if (scene.err_code < 0)
@@ -86,6 +89,11 @@ int		main(int argc, char *argv[])
 	ft_render(scene, 0, 0);
 	mlx_key_hook(g_win, keys, &scene);
 	mlx_hook(g_win, 17, 0, close_win, &scene);
+	end = clock();
+	t = (double)(end - begin) / CLOCKS_PER_SEC;
+	printf("\nIt took %f secs to render this image", t);
+	fflush(stdout);
+	printf("tt");
 	if (scene.save == 0)
 		mlx_loop(g_cnx);
 	else

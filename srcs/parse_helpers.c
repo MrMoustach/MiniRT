@@ -6,7 +6,7 @@
 /*   By: iharchi <iharchi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 01:00:33 by iharchi           #+#    #+#             */
-/*   Updated: 2020/11/24 04:30:03 by iharchi          ###   ########.fr       */
+/*   Updated: 2021/01/26 12:23:58 by iharchi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	ft_line_parse_helper(int type, char **tab, t_scene *scene)
 	else if (type == 9)
 		scene->skybox = 1;
 	else if (type == 10)
+		scene->ascii = 1;
+	else if (type == 11)
 		scene->err_code = -48;
 }
 
