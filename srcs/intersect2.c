@@ -42,7 +42,8 @@ t_hit		ft_cy_inte_h(t_hit hit, t_cylinder cy, t_ray ray, t_vector3 x)
 						ft_multi(cy.n, -m)));
 		hit.id = cy.id;
 		hit.ray = ray;
-		hit.color = cy.color;
+		hit.color = get_uv_pattern(get_cylindrical_cords(hit.p, cy), 2, 2);
+		// hit.color = cy.color;
 	}
 	else
 		hit = ft_disc_intersect(ray, cy);

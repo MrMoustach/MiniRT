@@ -38,5 +38,8 @@ fclean: clean
 re : fclean all
 
 linux :
-			@gcc  -g  main.c $(SRC) $(LIBFT)libft.a $(MLX) $(LINUX_FLAG) $(GNL) -o $(NAME)	
+			@gcc  -g  main.c $(SRC) $(LIBFT)libft.a $(MLX) $(LINUX_FLAG) $(GNL) -o $(NAME)
+test:
+			@gcc -g $(MLX) $(FLAG) main.c $(LIBFT)libft.a $(SRC) $(GNL) -o $(NAME)
+			@echo "\033[0;32mReady to use.\n\033[0;33mDo ./MiniRT scenename.rt"
 .PHONY: all clean fclean re

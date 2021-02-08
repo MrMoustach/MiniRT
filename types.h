@@ -32,6 +32,13 @@ typedef struct	s_vector3
 	float		z;
 }				t_vector3;
 
+typedef	struct	s_tuple
+{
+	float		u;
+	float		v;
+}				t_tuple;
+
+
 typedef struct	s_rgb
 {
 	int			r;

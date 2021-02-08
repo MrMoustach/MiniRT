@@ -17,7 +17,9 @@ t_hit		ft_sp_int_help(t_hit hit, t_sphere sphere, t_ray ray, float delta)
 	hit.p = ft_get_point(ray, hit.sol);
 	hit.normal = ft_normalize(ft_minus(sphere.center, hit.p));
 	hit.ray = ray;
-	hit.color = sphere.color;
+	// hit.color = get_uv_map(get_spherical_cords(hit.p, sphere));
+	hit.color = get_uv_pattern(get_spherical_cords(hit.p, sphere), 16, 8);
+	// hit.color = sphere.color;
 	hit.hit = (delta > 0);
 	hit.id = sphere.id;
 	return (hit);
@@ -62,10 +64,12 @@ t_hit		ft_pl_intersect(t_ray ray, t_plane pl)
 		tmp = ft_minus(pl.p, ray.p1);
 		hit.sol = ft_dot(tmp, pl.n) / denom;
 		hit.hit = (hit.sol >= 0);
-		hit.color = pl.color;
+		hit.p = ft_get_point(ray, hit.sol);
+		hit.color = get_uv_map(get_planar_cords(hit.p, pl));
+		// hit.color = get_uv_pattern(get_planar_cords(hit.p, pl), 2, 2);
+		// hit.color = pl.color;
 		hit.id = pl.id;
 		hit.normal = pl.n;
-		hit.p = ft_get_point(ray, hit.sol);
 		hit.ray = ray;
 	}
 	return (hit);
