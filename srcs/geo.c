@@ -83,16 +83,16 @@ t_rgb		get_uv_map(t_tuple uv)
 {
 	t_tuple			uv2;
 	t_rgb 			ret;
-	int	c;
+	char	*c;
 
 	uv2.u = floor(uv.u * 900);
 	uv2.v = floor(uv.v * 886);
-	c = *( int *)g_uvmap.addr + (int)round(uv2.u * g_uvmap.line_length + uv2.v *
+	c = g_uvmap.addr + (int)round(uv2.u * g_uvmap.line_length + uv2.v *
 											(g_uvmap.bpp / 8));
-	printf("%x\n", c);
-	ret.r = (int)(c >> 16);
-	ret.g = (int)((c & 0x00ff00) >> 8);
-	ret.b = (int)(c & 0x0000ff);
+	printf("%x\n", *c);
+	ret.r = (int)((int)*c >> 16);
+	ret.g = (int)(((int)*c & 0x00ff00) >> 8);
+	ret.b = (int)((int)*c & 0x0000ff);
 	printf("%d %d %d \n", ret.r, ret.g, ret.b);
 	return (ret);
 }
