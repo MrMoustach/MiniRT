@@ -83,17 +83,17 @@ t_rgb		get_uv_map(t_tuple uv)
 {
 	t_tuple			uv2;
 	t_rgb 			ret;
-	char	*c;
+	int				c;
 
-	uv2.u = floor(uv.u * 900);
-	uv2.v = floor(uv.v * 886);
-	c = g_uvmap.addr + (int)round(uv2.u * g_uvmap.line_length + uv2.v *
-											(g_uvmap.bpp / 8));
-	printf("%x\n", *c);
-	ret.r = (int)((int)*c >> 16);
-	ret.g = (int)(((int)*c & 0x00ff00) >> 8);
-	ret.b = (int)((int)*c & 0x0000ff);
-	printf("%d %d %d \n", ret.r, ret.g, ret.b);
+	uv2.u = floor(uv.u * g_uvmap.width);
+	uv2.v = floor(uv.v * g_uvmap.height);
+	c = *(int *)(g_uvmap.addr + (int)round(uv2.v * g_uvmap.line_length + uv2.u *
+											(g_uvmap.bpp / 8)));
+	// printf("%x\n", *c);
+	ret.r = (int)((int)c >> 16);
+	ret.g = (int)(((int)c & 0x00ff00) >> 8);
+	ret.b = (int)((int)c & 0x0000ff);
+	// printf("%d %d %d \n", ret.r, ret.g, ret.b);
 	return (ret);
 }
 
@@ -110,7 +110,7 @@ t_tuple		get_spherical_cords(t_vector3 p, t_sphere sp)
 	phi = acos(p2.y / sp.radius);
 	raw_u = theta / (2 * M_PI);
 	uv.u = 1 - (raw_u + 0.5);
-	uv.v = 1 - phi / M_PI;
+	uv.v = phi / M_PI;
 	return (uv);
 }
 
@@ -120,8 +120,8 @@ t_tuple		get_planar_cords(t_vector3 p, t_plane plane)
 	t_vector3	p2;
 
 	p2 = ft_minus(p , plane.p);
-	uv.u = fmod(p2.x, 1);
-	uv.v = fmod(p2.z, 1);
+	uv.u = fabs(fmod(p2.x, 1));
+	uv.v = fabs(fmod(p2.z, 1));
 	return (uv);
 }
 

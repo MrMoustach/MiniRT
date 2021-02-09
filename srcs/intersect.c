@@ -17,8 +17,8 @@ t_hit		ft_sp_int_help(t_hit hit, t_sphere sphere, t_ray ray, float delta)
 	hit.p = ft_get_point(ray, hit.sol);
 	hit.normal = ft_normalize(ft_minus(sphere.center, hit.p));
 	hit.ray = ray;
-	// hit.color = get_uv_map(get_spherical_cords(hit.p, sphere));
-	hit.color = get_uv_pattern(get_spherical_cords(hit.p, sphere), 16, 8);
+	hit.color = get_uv_map(get_spherical_cords(hit.p, sphere));
+	// hit.color = get_uv_pattern(get_spherical_cords(hit.p, sphere), 16, 8);
 	// hit.color = sphere.color;
 	hit.hit = (delta > 0);
 	hit.id = sphere.id;

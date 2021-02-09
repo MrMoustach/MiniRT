@@ -83,8 +83,8 @@ int		main(int argc, char *argv[])
 									&g_skybox.bpp, &g_skybox.bpp);
 	g_skybox.addr = mlx_get_data_addr(g_skybox.img,
 					&g_skybox.bpp, &g_skybox.line_length, &g_skybox.endian);
-	g_uvmap.img = mlx_xpm_file_to_image(g_cnx, "./srcs/uv.xpm",
-									&g_uvmap.bpp, &g_uvmap.bpp);
+	g_uvmap.img = mlx_xpm_file_to_image(g_cnx, "./srcs/world.xpm",
+									&g_uvmap.width, &g_uvmap.height);
 	g_uvmap.addr = mlx_get_data_addr(g_uvmap.img,
 					&g_uvmap.bpp, &g_uvmap.line_length, &g_uvmap.endian);	
 	mlx_put_image_to_window(g_cnx, g_win, g_skybox.img, 0, 0);
